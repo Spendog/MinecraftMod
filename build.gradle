@@ -1,0 +1,48 @@
+// Use ForgeGradle 2.1-SNAPSHOT for Minecraft 1.8.9
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1.0"
+group = "com.yourname.modid" // Replace with your package name
+archivesBaseName = "modid"    // Replace with your mod ID
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+
+    // Use the appropriate mappings
+    mappings = "stable_20"
+}
+
+dependencies {
+    // Use 'deobfCompile' for Forge dependency
+    deobfCompile 'net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9'
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // Replace version and mcversion in mcmod.info
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // Copy the rest of the resources
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
