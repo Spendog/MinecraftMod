@@ -7,4 +7,14 @@
       "topic": "Geology",
       "content": "Sedimentary rocks are formed by the deposition and compression of materials like sand, silt, or organic matter over time. Examples include sandstone, shale, and limestone."
     }
+    {
+        "topic": "Geology",
+        "content": "Coal ore is formed under pressure over millions of years!",
+        "blockType": "minecraft:coal_ore"
+    },
+    {
+        "topic": "History",
+        "content": "Gold has been used in coins for thousands of years!",
+        "blockType": "minecraft:gold_ore"
+    }
   ]
