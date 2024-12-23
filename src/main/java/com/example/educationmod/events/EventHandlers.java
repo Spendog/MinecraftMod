@@ -4,10 +4,11 @@ import com.example.educationmod.content.ContentLoader;
 import com.example.educationmod.content.EducationalContent;
 import com.example.educationmod.EducationMod;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -22,11 +23,11 @@ public class EventHandlers {
     /**
      * Framework method to send educational content to a player.
      */
-    private static void sendEducationalContent(PlayerEntity player, String topic) {
+    private static void sendEducationalContent(EntityPlayer player, String topic) {
         List<EducationalContent> contentList = ContentLoader.getContent();
         for (EducationalContent edu : contentList) {
             if (edu.getTopic().equalsIgnoreCase(topic)) {
-                player.sendMessage(new StringTextComponent(edu.getContent()), player.getUUID());
+                player.addChatMessage(new ChatComponentText(edu.getContent()), player.getUniqueID());
                 break; // Send the first matching topic content.
             }
         }
@@ -37,7 +38,7 @@ public class EventHandlers {
      */
     @SubscribeEvent
     public static void onPlayerMine(PlayerEvent.BreakSpeed event) {
-        PlayerEntity player = event.getPlayer();
+        EntityPlayer player = event.entityPlayer;
         Block block = event.getState().getBlock();
 
         if (block.getRegistryName().toString().equals("minecraft:coal_ore")) {
@@ -50,10 +51,10 @@ public class EventHandlers {
      */
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        PlayerEntity player = event.player;
+        EntityPlayer player = event.player;
 
         if (!player.level.isClientSide) {
-            BlockPos pos = player.blockPosition();
+            BlockPos pos = player.getPosition();
             Block blockBelow = player.level.getBlockState(pos.below()).getBlock();
 
             if (blockBelow.getRegistryName().toString().equals("minecraft:grass_block")) {
@@ -67,7 +68,7 @@ public class EventHandlers {
      */
     @SubscribeEvent
     public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event) {
-        PlayerEntity player = event.getPlayer();
+        EntityPlayer player = event.entityPlayer;
         Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 
         if (block.getRegistryName().toString().equals("minecraft:oak_log")) {
@@ -80,10 +81,10 @@ public class EventHandlers {
      */
     @SubscribeEvent
     public static void onPlayerLook(PlayerInteractEvent event) {
-        PlayerEntity player = event.getPlayer();
+        EntityPlayer player = event.entityPlayer;
         RayTraceResult ray = player.pick(5.0D, 0.0F, false);
 
-        if (ray.getType() == RayTraceResult.Type.BLOCK) {
+        if (ray.getType() == MovingObjectPosition.MovingObjectType.BLOCK) {
             String blockName = ray.getBlock().getRegistryName().toString();
 
             if (blockName.equals("minecraft:stone")) {
@@ -103,7 +104,7 @@ public class EventHandlers {
             tickCounter++;
 
             if (tickCounter >= 1200) { // 1200 ticks = 1 minute
-                for (PlayerEntity player : event.world.players()) {
+                for (EntityPlayer player : event.world.players()) {
                     sendEducationalContent(player, "General");
                 }
                 tickCounter = 0; // Reset counter.

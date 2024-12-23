@@ -1,5 +1,3 @@
-This mapping 'stable_20' was designed for MC 1.8.8! Use at your own peril.This mapping 'stable_20' was designed for MC 1.8.8! Use at your own peril.
-
 WARNING: You are using an unsupported version of ForgeGradle.
 Please consider upgrading to ForgeGradle 5 and helping in the efforts to get old versions working on the modern toolchain.
 See https://gist.github.com/TheCurle/fe7ad3ede188cbdd15c235cc75d52d4a for more info on contributing.
@@ -12,18 +10,8 @@ See https://gist.github.com/TheCurle/fe7ad3ede188cbdd15c235cc75d52d4a for more i
          by: Searge, ProfMobius, Fesh0r,         
          R4wk, ZeuX, IngisKahn, bspkrs           
 #################################################
+:clean
 
-FAILURE: Build failed with an exception.
+BUILD SUCCESSFUL
 
-* What went wrong:
-A problem occurred configuring root project 'MinecraftEDU'.
-> Could not find forge.jar (net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9).
-  Searched in the following locations:
-      https://maven.minecraftforge.net/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9.jar
-
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
-
-BUILD FAILED
-
-Total time: 7.361 secs
+Total time: 5.55 secs

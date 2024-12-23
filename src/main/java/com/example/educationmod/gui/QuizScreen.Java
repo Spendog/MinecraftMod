@@ -1,65 +1,60 @@
-package com.example.educationmod.gui;
+package com.example.educationmod.gui.QuizScreen;
 
 import com.example.educationmod.content.QuizContent;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import java.io.IOException;
 
-public class QuizScreen extends Screen {
+public class QuizScreen extends GuiScreen {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("educationmod", "textures/gui/quiz_background.png");
-    private final QuizContent quiz;
+    private QuizContent quizContent;
 
-    public QuizScreen(QuizContent quiz) {
-        super(new TextComponent(quiz.getTitle()));
-        this.quiz = quiz;
+    public QuizScreen(QuizContent quizContent) {
+        this.quizContent = quizContent;
     }
 
     @Override
-    protected void init() {
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
+    public void initGui() {
+        this.buttonList.clear();
+        // Center the button
+        int buttonWidth = 200;
+        int buttonHeight = 20;
+        int centerX = this.width / 2 - buttonWidth / 2;
+        int centerY = this.height / 2 - buttonHeight / 2;
 
-        // Add buttons for options
-        for (int i = 0; i < quiz.getOptions().length; i++) {
-            String option = quiz.getOptions()[i];
-            int buttonWidth = 150;
-            int buttonHeight = 20;
-            int buttonX = centerX - buttonWidth / 2;
-            int buttonY = centerY - (quiz.getOptions().length * buttonHeight / 2) + (i * 25);
+        // Add "Start Quiz" button
+        this.buttonList.add(new GuiButton(1, centerX, centerY, buttonWidth, buttonHeight, "Start Quiz"));
 
-            this.addRenderableWidget(new Button(buttonX, buttonY, buttonWidth, buttonHeight, new TextComponent(option), button -> {
-                handleAnswer(i);
-            }));
+        // Add more buttons or fields as needed
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if (button.id == 1) {
+            // Implement quiz start logic
+            System.out.println("Quiz Started: " + quizContent.getTitle());
+            // For example, transition to the first question screen
+            // this.mc.displayGuiScreen(new QuizQuestionScreen(quizContent.getQuestions().get(0)));
+            this.mc.displayGuiScreen(null); // Close the GUI for now
         }
     }
 
-    private void handleAnswer(int index) {
-        boolean isCorrect = quiz.isCorrect(index);
-        Minecraft.getInstance().player.displayClientMessage(
-                new TextComponent(isCorrect ? "Correct!" : "Wrong!"), true
-        );
-        this.onClose();
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        // Draw the background
+        this.drawDefaultBackground();
+
+        // Draw title
+        this.drawCenteredString(this.fontRenderer, "Quiz Time!", this.width / 2, 20, 0xFFFFFF);
+
+        // Draw additional text or images here
+        this.drawCenteredString(this.fontRenderer, quizContent.getQuestion(), this.width / 2, 60, 0xFFFFFF);
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
-
-        RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-        int x = (this.width - 256) / 2;
-        int y = (this.height - 256) / 2;
-        blit(poseStack, x, y, 0, 0, 256, 256, 256, 256);
-
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    public boolean isPauseScreen() {
-        return false;
+    public boolean doesGuiPauseGame() {
+        return false; // Set to true if you want to pause the game when the GUI is open
     }
 }

@@ -3,8 +3,8 @@ package com.example.educationmod.events;
 import com.example.educationmod.gui.QuizScreen;
 import com.example.educationmod.content.QuizContent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,9 +18,9 @@ public class QuizEvents {
     /**
      * Trigger a quiz based on some game event or input.
      */
-    public static void triggerQuiz(PlayerEntity player, QuizContent quiz) {
+    public static void triggerQuiz(EntityPlayer player, QuizContent quiz) {
         currentQuiz = quiz;
-        player.sendMessage(new StringTextComponent("Quiz triggered: " + quiz.getTitle()), player.getUUID());
+        player.addChatMessage(new ChatComponentText("Quiz triggered: " + quiz.getTitle()), player.getUniqueID());
         openQuizScreen();
     }
 
@@ -31,17 +31,4 @@ public class QuizEvents {
         Minecraft.getInstance().setScreen(new QuizScreen(currentQuiz));
     }
 
-    /**
-     * Keybinding to open a random quiz for testing purposes.
-     */
-    @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (/* Check your custom keybind here */) {
-            PlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                QuizContent sampleQuiz = new QuizContent("Sample Quiz", "What is the capital of France?", "Paris");
-                triggerQuiz(player, sampleQuiz);
-            }
-        }
     }
-}

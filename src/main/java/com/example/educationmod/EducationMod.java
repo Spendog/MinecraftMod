@@ -4,6 +4,7 @@ import com.example.educationmod.content.ContentLoader;
 import com.example.educationmod.content.QuizContent;
 import com.example.educationmod.gui.QuizScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -14,13 +15,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.lwjgl.glfw.GLFW; // For GLFW key constants
+import org.lwjgl.glfw.GLFW;
 
 @Mod(EducationMod.MODID)
 public class EducationMod {
     public static final String MODID = "educationmod";
     public static final String KEYBIND_NAME = "Open Quiz Screen"; // Keybind name
-    public static int KEYBIND_KEY = GLFW.GLFW_KEY_F6; // Default key
+    public static final int KEYBIND_KEY = GLFW.GLFW_KEY_F6; // Default key
 
     public EducationMod() {
         // Register mod lifecycle events
@@ -51,6 +52,8 @@ public class EducationMod {
     private static class ClientEventHandler {
         @SubscribeEvent
         public void onKeyPress(InputEvent.KeyInputEvent event) {
+            // GLFW_KEY_F6 corresponds to key code 327
+            // However, Minecraft Forge uses GLFW key codes directly
             if (event.getKey() == KEYBIND_KEY && event.getAction() == GLFW.GLFW_PRESS) {
                 Player player = Minecraft.getInstance().player;
                 if (player != null) {
