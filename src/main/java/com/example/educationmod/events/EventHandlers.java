@@ -4,109 +4,98 @@ import com.example.educationmod.content.ContentLoader;
 import com.example.educationmod.content.EducationalContent;
 import com.example.educationmod.EducationMod;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.event.TickEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MovingObjectPosition;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import java.util.List;
+import net.minecraft.world.World;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraft.util.BlockPos;
+import net.minecraft.block.Block;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import com.example.educationmod.EducationMod;
+import com.example.educationmod.content.EducationalContent;
+import com.example.educationmod.content.ContentLoader;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.List;
 
-@Mod.EventBusSubscriber(modid = EducationMod.MODID)
 public class EventHandlers {
+    @SideOnly(Side.CLIENT)
+    private void sendEducationalContent(EntityPlayer player, String topic) {
+        EducationalContent content = ContentLoader.contents.stream()
+            .filter(c -> c.getTopic() != null && c.getTopic().equalsIgnoreCase(topic))
+            .findAny()
+            .orElse(null);
+        if (content != null) {
+            player.addChatMessage(new ChatComponentText(String.format("[%s] %s", content.getTopic(), content.getContent())));
+        }
+    }
 
-    /**
-     * Framework method to send educational content to a player.
-     */
-    private static void sendEducationalContent(PlayerEntity player, String topic) {
-        List<EducationalContent> contentList = ContentLoader.getContent();
-        for (EducationalContent edu : contentList) {
-            if (edu.getTopic().equalsIgnoreCase(topic)) {
-                player.sendMessage(new StringTextComponent(edu.getContent()), player.getUUID());
-                break; // Send the first matching topic content.
+    @SubscribeEvent
+    public void onPlayerMine(PlayerEvent.BreakSpeed event) {
+        Block block = event.state.getBlock();
+        String topic = block.getUnlocalizedName();
+        sendEducationalContent(event.entityPlayer, topic);
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(PlayerTickEvent event) {
+        if (event.phase == Phase.END) {
+            EntityPlayer player = event.player;
+            if (player.isInWater()) {
+                sendEducationalContent(player, "Water");
+            } else if (!player.onGround && player.motionY < 0) {
+                sendEducationalContent(player, "Gravity");
             }
         }
     }
 
-    /**
-     * Triggered when a player breaks a block.
-     */
     @SubscribeEvent
-    public static void onPlayerMine(PlayerEvent.BreakSpeed event) {
-        PlayerEntity player = event.getPlayer();
-        Block block = event.getState().getBlock();
+    public void onBlockInteract(PlayerInteractEvent event) {
+        Block block = event.world.getBlockState(event.pos).getBlock();
+        String topic = block.getUnlocalizedName();
+        sendEducationalContent(event.entityPlayer, topic);
+    }
 
-        if (block.getRegistryName().toString().equals("minecraft:coal_ore")) {
-            sendEducationalContent(player, "Geology");
+    @SubscribeEvent
+    public void onPlayerLook(PlayerInteractEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        MovingObjectPosition mop = EducationMod.proxy.getPlayerLookTarget(player);
+        
+        if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            Block block = event.world.getBlockState(mop.getBlockPos()).getBlock();
+            String topic = block.getUnlocalizedName();
+            sendEducationalContent(player, topic);
         }
     }
 
-    /**
-     * Triggered when a player stands on a block.
-     */
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        PlayerEntity player = event.player;
-
-        if (!player.level.isClientSide) {
-            BlockPos pos = player.blockPosition();
-            Block blockBelow = player.level.getBlockState(pos.below()).getBlock();
-
-            if (blockBelow.getRegistryName().toString().equals("minecraft:grass_block")) {
-                sendEducationalContent(player, "Biomes");
-            }
-        }
-    }
-
-    /**
-     * Triggered when a player interacts with a block.
-     */
-    @SubscribeEvent
-    public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event) {
-        PlayerEntity player = event.getPlayer();
-        Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-
-        if (block.getRegistryName().toString().equals("minecraft:oak_log")) {
-            sendEducationalContent(player, "Forestry");
-        }
-    }
-
-    /**
-     * Triggered when a player looks at a block.
-     */
-    @SubscribeEvent
-    public static void onPlayerLook(PlayerInteractEvent event) {
-        PlayerEntity player = event.getPlayer();
-        RayTraceResult ray = player.pick(5.0D, 0.0F, false);
-
-        if (ray.getType() == RayTraceResult.Type.BLOCK) {
-            String blockName = ray.getBlock().getRegistryName().toString();
-
-            if (blockName.equals("minecraft:stone")) {
-                sendEducationalContent(player, "Geology");
-            }
-        }
-    }
-
-    /**
-     * Timed event to periodically send educational content.
-     */
     private static int tickCounter = 0;
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (!event.world.isClientSide) {
+    public void onWorldTick(WorldTickEvent event) {
+        if (!event.world.isRemote) {
             tickCounter++;
-
             if (tickCounter >= 1200) { // 1200 ticks = 1 minute
-                for (PlayerEntity player : event.world.players()) {
+                @SuppressWarnings("unchecked")
+                List<EntityPlayer> players = event.world.playerEntities;
+                for (EntityPlayer player : players) {
                     sendEducationalContent(player, "General");
                 }
-                tickCounter = 0; // Reset counter.
+                tickCounter = 0;
             }
         }
     }

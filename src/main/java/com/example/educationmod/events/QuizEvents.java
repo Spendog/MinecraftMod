@@ -1,47 +1,49 @@
 package com.example.educationmod.events;
 
-import com.example.educationmod.gui.QuizScreen;
 import com.example.educationmod.content.QuizContent;
+import com.example.educationmod.gui.QuizScreen;
+import com.example.educationmod.EducationMod;
+import com.example.educationmod.init.ModKeyBindings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
-@Mod.EventBusSubscriber(modid = "educationmod", value = Dist.CLIENT)
+@SideOnly(Side.CLIENT)
 public class QuizEvents {
-
-    private static QuizContent currentQuiz;
-
-    /**
-     * Trigger a quiz based on some game event or input.
-     */
-    public static void triggerQuiz(PlayerEntity player, QuizContent quiz) {
-        currentQuiz = quiz;
-        player.sendMessage(new StringTextComponent("Quiz triggered: " + quiz.getTitle()), player.getUUID());
-        openQuizScreen();
+    private final Minecraft mc;
+    private final KeyBinding triggerQuizKey;
+    private QuizContent currentQuiz;
+    
+    public QuizEvents() {
+        mc = Minecraft.getMinecraft();
+        triggerQuizKey = ModKeyBindings.openQuizKey;
     }
 
-    /**
-     * Open the quiz GUI screen.
-     */
-    private static void openQuizScreen() {
-        Minecraft.getInstance().setScreen(new QuizScreen(currentQuiz));
+    public void triggerQuiz(EntityPlayer player, QuizContent quiz) {
+        if (player != null && quiz != null) {
+            currentQuiz = quiz;
+            openQuizScreen(quiz);
+        }
     }
 
-    /**
-     * Keybinding to open a random quiz for testing purposes.
-     */
+    @SideOnly(Side.CLIENT)
+    private void openQuizScreen(QuizContent quiz) {
+        if (quiz != null && mc.thePlayer != null) {
+            mc.displayGuiScreen(new QuizScreen(quiz));
+        }
+    }
+
     @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (/* Check your custom keybind here */) {
-            PlayerEntity player = Minecraft.getInstance().player;
-            if (player != null) {
-                QuizContent sampleQuiz = new QuizContent("Sample Quiz", "What is the capital of France?", "Paris");
-                triggerQuiz(player, sampleQuiz);
-            }
+    public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if (triggerQuizKey != null && triggerQuizKey.isPressed()) {
+            openQuizScreen(currentQuiz);
         }
     }
 }
