@@ -1,13 +1,22 @@
 // CommonProxy.java
 package com.example.educationmod;
 
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.logging.log4j.LogManager;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.SidedProxy;
+
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +25,7 @@ import java.nio.file.Files;
 
 public class CommonProxy {
 
-    private static final Logger LOGGER = LogManager.getLogger("EducationMod");
+    private static final Logger LOGGER = LogManager.getLogger("educationmod");
 
     public void setupDataDirectory(FMLPreInitializationEvent event) {
         // Create data folder and example JSON files

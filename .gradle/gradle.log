@@ -1,6 +1,15 @@
 WARNING: You are using an unsupported version of ForgeGradle.
 Please consider upgrading to ForgeGradle 5 and helping in the efforts to get old versions working on the modern toolchain.
 See https://gist.github.com/TheCurle/fe7ad3ede188cbdd15c235cc75d52d4a for more info on contributing.
+#################################################
+         ForgeGradle 2.1.3-g6a7c715        
+  https://github.com/MinecraftForge/ForgeGradle  
+#################################################
+               Powered by MCP unknown               
+             http://modcoderpack.com             
+         by: Searge, ProfMobius, Fesh0r,         
+         R4wk, ZeuX, IngisKahn, bspkrs           
+#################################################
 :deobfCompileDummyTask
 :deobfProvidedDummyTask
 :sourceApiJava UP-TO-DATE
@@ -8,87 +17,7 @@ See https://gist.github.com/TheCurle/fe7ad3ede188cbdd15c235cc75d52d4a for more i
 :processApiResources UP-TO-DATE
 :apiClasses UP-TO-DATE
 :sourceMainJava
-:compileJavaX:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:4: error: package cpw.mods.fml.client.registry does not exist
-import cpw.mods.fml.client.registry.ClientRegistry;
-                                   ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:5: error: package cpw.mods.fml.common.event does not exist
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-                                ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:6: error: package cpw.mods.fml.common.eventhandler does not exist
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-                                       ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:7: error: package cpw.mods.fml.common.gameevent does not exist
-import cpw.mods.fml.common.gameevent.InputEvent;
-                                    ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:8: error: package cpw.mods.fml.common does not exist
-import cpw.mods.fml.common.FMLCommonHandler;
-                          ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\CommonProxy.java:4: error: package cpw.mods.fml.common.event does not exist
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-                                ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:20: error: cannot find symbol
-    public void setupDataDirectory(FMLPreInitializationEvent event) {
-                                   ^
-  symbol:   class FMLPreInitializationEvent
-  location: class ClientProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:32: error: package InputEvent does not exist
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
-                                     ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\CommonProxy.java:21: error: cannot find symbol
-    public void setupDataDirectory(FMLPreInitializationEvent event) {
-                                   ^
-  symbol:   class FMLPreInitializationEvent
-  location: class CommonProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:20: error: cannot find symbol
-    public static List<EducationalContent> contents = new ArrayList<>();
-                       ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:42: error: cannot find symbol
-    public static List<EducationalContent> getContent() {
-                       ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:46: error: cannot find symbol
-    public static EducationalContent getRandomContent(String topic) {
-                  ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:5: error: package cpw.mods.fml.common does not exist
-import cpw.mods.fml.common.Mod;
-                          ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:6: error: package cpw.mods.fml.common.event does not exist
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-                                ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:7: error: package cpw.mods.fml.common.event does not exist
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-                                ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:8: error: package cpw.mods.fml.common.event does not exist
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-                                ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:9: error: package cpw.mods.fml.common does not exist
-import cpw.mods.fml.common.SidedProxy;
-                          ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:13: error: cannot find symbol
-@Mod(modid = EducationMod.MODID, name = EducationMod.NAME, version = EducationMod.VERSION)
- ^
-  symbol: class Mod
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:30: error: cannot find symbol
-    public void preInit(FMLPreInitializationEvent event) {
-                        ^
-  symbol:   class FMLPreInitializationEvent
-  location: class EducationMod
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:36: error: cannot find symbol
-    public void init(FMLInitializationEvent event) {
-                     ^
-  symbol:   class FMLInitializationEvent
-  location: class EducationMod
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:42: error: cannot find symbol
-    public void postInit(FMLPostInitializationEvent event) {
-                         ^
-  symbol:   class FMLPostInitializationEvent
-  location: class EducationMod
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:4: error: cannot find symbol
+:compileJavaX:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:4: error: cannot find symbol
 import com.example.educationmod.content.EducationalContent;
                                        ^
   symbol:   class EducationalContent
@@ -113,111 +42,34 @@ import cpw.mods.fml.relauncher.Side;
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:32: error: package cpw.mods.fml.relauncher does not exist
 import cpw.mods.fml.relauncher.SideOnly;
                               ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:3: error: cannot find symbol
-import com.example.educationmod.content.QuizContent;
-                                       ^
-  symbol:   class QuizContent
-  location: package com.example.educationmod.content
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:4: error: cannot find symbol
 import com.example.educationmod.gui.QuizScreen;
                                    ^
   symbol:   class QuizScreen
   location: package com.example.educationmod.gui
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:22: error: cannot find symbol
-    private QuizContent currentQuiz;
-            ^
-  symbol:   class QuizContent
-  location: class QuizEvents
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:29: error: cannot find symbol
-    public void triggerQuiz(EntityPlayer player, QuizContent quiz) {
-                                                 ^
-  symbol:   class QuizContent
-  location: class QuizEvents
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:37: error: cannot find symbol
-    private void openQuizScreen(QuizContent quiz) {
-                                ^
-  symbol:   class QuizContent
-  location: class QuizEvents
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:31: error: cannot find symbol
-    @SubscribeEvent
-     ^
-  symbol:   class SubscribeEvent
-  location: class ClientProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:22: error: cannot find symbol
-    @SidedProxy(clientSide = "com.yourname.EducationMod.ClientProxy",
-     ^
-  symbol:   class SidedProxy
-  location: class EducationMod
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:26: error: package Mod does not exist
-    @Mod.Instance(MODID)
-        ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:29: error: package Mod does not exist
-    @Mod.EventHandler
-        ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:35: error: package Mod does not exist
-    @Mod.EventHandler
-        ^
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\EducationMod.java:41: error: package Mod does not exist
-    @Mod.EventHandler
-        ^
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:37: error: cannot find symbol
     @SideOnly(Side.CLIENT)
      ^
   symbol:   class SideOnly
   location: class EventHandlers
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:27: error: cannot find symbol
-        ClientRegistry.registerKeyBinding(OPEN_GUI_KEY);
-        ^
-  symbol:   variable ClientRegistry
-  location: class ClientProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:28: error: cannot find symbol
-        FMLCommonHandler.instance().bus().register(this);
-        ^
-  symbol:   variable FMLCommonHandler
-  location: class ClientProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java:35: error: cannot find symbol
-            Minecraft.getMinecraft().displayGuiScreen(new GuiMainMenu());
-                                                          ^
-  symbol:   class GuiMainMenu
-  location: class ClientProxy
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:24: error: cannot find symbol
-        contents.add(new EducationalContent("Mining", "Mining is essential for gathering resources"));
-                         ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:25: error: cannot find symbol
-        contents.add(new EducationalContent("Crafting", "Crafting allows you to create new items"));
-                         ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:26: error: cannot find symbol
-        contents.add(new EducationalContent("Building", "Building lets you create structures"));
-                         ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:32: error: cannot find symbol
-            Type listType = new TypeToken<ArrayList<EducationalContent>>(){}.getType();
-                                                    ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:33: error: cannot find symbol
-            List<EducationalContent> loadedContent = new Gson().fromJson(reader, listType);
-                 ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
-X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\content\ContentLoader.java:47: error: cannot find symbol
-        List<EducationalContent> matchingContent = contents.stream()
-             ^
-  symbol:   class EducationalContent
-  location: class ContentLoader
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:39: error: cannot find symbol
         EducationalContent content = ContentLoader.contents.stream()
         ^
   symbol:   class EducationalContent
   location: class EventHandlers
+X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:40: error: cannot find symbol
+            .filter(c -> c.getTopic() != null && c.getTopic().equalsIgnoreCase(topic))
+                          ^
+  symbol:   method getTopic()
+  location: variable c of type QuizContent
+X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:40: error: cannot find symbol
+            .filter(c -> c.getTopic() != null && c.getTopic().equalsIgnoreCase(topic))
+                                                  ^
+  symbol:   method getTopic()
+  location: variable c of type QuizContent
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\EventHandlers.java:77: error: cannot find symbol
-        MovingObjectPosition mop = EducationMod.instance.proxy.getPlayerLookTarget(player);
-                                                              ^
+        MovingObjectPosition mop = EducationMod.proxy.getPlayerLookTarget(player);
+                                                     ^
   symbol:   method getPlayerLookTarget(EntityPlayer)
   location: variable proxy of type CommonProxy
 X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\events\QuizEvents.java:39: error: cannot find symbol
@@ -225,7 +77,9 @@ X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\exam
                                     ^
   symbol:   class QuizScreen
   location: class QuizEvents
-52 errors
+Note: X:\WORKING CODE\MinecraftMod_1_8_9\MinecraftMod\build\sources\main\java\com\example\educationmod\ClientProxy.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+14 errors
  FAILED
 
 FAILURE: Build failed with an exception.
@@ -239,4 +93,4 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
 
 BUILD FAILED
 
-Total time: 0.795 secs
+Total time: 5.439 secs
