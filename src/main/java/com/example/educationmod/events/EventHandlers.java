@@ -1,5 +1,6 @@
 package com.example.educationmod.events;
 
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import com.example.educationmod.EducationMod;
 import com.example.educationmod.content.ContentLoader;
 import com.example.educationmod.content.QuizContent;

@@ -14,6 +14,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.SidedProxy;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.client.Minecraft;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -64,5 +68,8 @@ public class CommonProxy {
 
     public void registerKeyBindings() {
         // Common (server) side doesn't register keys
+    }
+public MovingObjectPosition getPlayerLookTarget(EntityPlayer player) {
+        return Minecraft.getMinecraft().objectMouseOver;
     }
 }

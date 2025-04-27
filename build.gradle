@@ -26,6 +26,21 @@ minecraft {
     makeObfSourceJar = false
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+compileJava {
+    source = sourceSets.main.java
+}
+
 dependencies {
     // if you want to use classes of another mod/library, you can add that .jar in a /libs folder
     // in the project, then open the project structure in `intellIJ > libraries > add` and select the jar
@@ -62,5 +77,9 @@ processResources {
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
     }
 }
