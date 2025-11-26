@@ -2,12 +2,26 @@
 
 **Goal:** A "Layered Compositional Learning System" driven by external JSON files. It treats learning as a "3D puzzle" where concepts stack to build deep understanding.
 
-## Core Philosophy
-1.  **Immersive Learning**: Facts stream in naturally via HUD (v012).
-2.  **Layered Concepts**: Understanding is built by stacking "concept layers" (v013).
-3.  **Trigger-Event Engine**: Gameplay actions (mining, crafting) trigger learning moments (v014).
+## 🚀 Getting Started (For Developers)
 
-## Architecture
+**STOP! READ THIS FIRST.**
+
+To ensure consistent growth and maintain the project's philosophy, please follow this workflow. Do not guess; follow the established path.
+
+### 📂 Documentation & Handoff
+All development documentation is located in the `docs/` folder.
+
+1.  **`docs/handoff.md`**: **START HERE.** This file contains the current system state, recent changes, and immediate next steps. It is the "save file" for our development process.
+2.  **`docs/task.md`**: The master checklist. Check this to see what is done and what is planned.
+3.  **`docs/walkthrough.md`**: A historical record of features and how they work. Consult this to understand existing systems before building new ones.
+4.  **`docs/implementation_plan.md`**: Technical details for the current/recent version.
+
+### 🧠 Core Philosophy (The "Why")
+*   **Immersive**: Learning happens *during* gameplay, not in a separate menu.
+*   **Layered**: Concepts are "living pieces" that stack. You don't just "know" a fact; you build a foundation.
+*   **Data-Driven**: The mod is an engine. The *content* lives in JSON files.
+
+## Architecture Overview
 
 ### 1. The Brain (Data)
 **`ModConfigManager`** reads/writes to `.minecraft/config/mod_data/`.
@@ -32,14 +46,9 @@
 *   **`TriggerEditorScreen`**: Shows active triggers and statistics.
 *   **`ModMenuScreen`**: Central hub for all tools.
 
-## Key Features (v014)
-*   **Chat Quizzes**: `/edu` command for seamless answering.
-*   **Layer Integration**: Correct answers stack concepts automatically.
-*   **Trigger Tracking**: See exactly when and how often triggers fire.
-*   **Detailed Logging**: Export learning data to clipboard for analysis.
+## How to Run
+1.  **Build**: `.\gradlew build`
+2.  **Run Client**: `.\gradlew runClient`
 
-## Implementation Roadmap
-*   ✅ **v012**: Immersive Learning (HUD, Idle Quizzes)
-*   ✅ **v013**: Layered System (Concept Stacks, Balance Engine)
-*   ✅ **v014**: Integration (Triggers -> Quizzes -> Layers)
-*   ⬜ **v015**: Content Expansion (Geology, Color Theory Deep Dive)
+---
+*Maintained by the Antigravity Team. Validated for Fabric 1.21.5.*
