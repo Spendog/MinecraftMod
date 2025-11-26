@@ -13,3 +13,5 @@ out/
 .settings/
 .classpath
 .project
+!run/config/mod_data/
+!run/logs/
