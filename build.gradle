@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,6 +11,9 @@ base {
 }
 
 repositories {
+	mavenCentral()
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.terraformersmc.com/releases/" } // For Mod Menu if needed later
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -26,6 +29,11 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Roughly Enough Items
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:19.0.809"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:19.0.809"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:19.0.809"
 }
 
 processResources {

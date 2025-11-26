@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "com.example.educationmod.EducationMod"
+        ],
+        "client": [
+            "com.example.educationmod.EducationModClient"
         ]
     },
     "mixins": [

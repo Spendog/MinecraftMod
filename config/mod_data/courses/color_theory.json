@@ -1,0 +1,19 @@
+{
+    "id": "color_theory",
+    "title": "Color Theory",
+    "description": "Learn the basics of colors and mixing.",
+    "books": [
+        {
+            "id": "basics",
+            "title": "The Basics",
+            "chapters": [
+                {
+                    "id": "mixing_colors",
+                    "title": "Mixing Colors",
+                    "type": "QUIZ",
+                    "content_file": "mixing_colors.json"
+                }
+            ]
+        }
+    ]
+}

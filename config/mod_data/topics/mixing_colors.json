@@ -1,0 +1,33 @@
+{
+    "id": "mixing_colors",
+    "title": "Mixing Colors",
+    "questions": [
+        {
+            "question": "What do you get when you mix Red and Blue?",
+            "correct_answer": "Purple",
+            "incorrect_answers": [
+                "Green",
+                "Orange",
+                "Brown"
+            ]
+        },
+        {
+            "question": "What is the hex code for pure White?",
+            "correct_answer": "#FFFFFF",
+            "incorrect_answers": [
+                "#000000",
+                "#FF0000",
+                "#123456"
+            ]
+        },
+        {
+            "question": "Which of these is a primary color?",
+            "correct_answer": "Red",
+            "incorrect_answers": [
+                "Green",
+                "Purple",
+                "Orange"
+            ]
+        }
+    ]
+}

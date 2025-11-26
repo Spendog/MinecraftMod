@@ -10,24 +10,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve("mod_data");
     public static final Path TOPICS_DIR = CONFIG_DIR.resolve("topics");
     public static final Path EVENTS_DIR = CONFIG_DIR.resolve("events");
+    public static final Path COURSES_DIR = CONFIG_DIR.resolve("courses");
+
+    private static final List<EventDefinition> loadedEvents = new ArrayList<>();
+    private static final List<CourseDefinition> loadedCourses = new ArrayList<>();
 
     public static void init() {
         try {
             Files.createDirectories(TOPICS_DIR);
             Files.createDirectories(EVENTS_DIR);
+            Files.createDirectories(COURSES_DIR);
             EducationMod.LOGGER.info("Configuration directories initialized at " + CONFIG_DIR);
-            
+
             // Create example files if empty
             createExampleFiles();
-            
-            // Load events
+
+            // Load events and courses
             loadEvents();
+            loadCourses();
         } catch (IOException e) {
             EducationMod.LOGGER.error("Failed to create configuration directories", e);
         }
@@ -81,8 +89,6 @@ public class ModConfigManager {
         public String data;
     }
 
-    private static final java.util.List<EventDefinition> loadedEvents = new java.util.ArrayList<>();
-
     public static void loadEvents() {
         loadedEvents.clear();
         File[] files = EVENTS_DIR.toFile().listFiles((d, name) -> name.endsWith(".json"));
@@ -101,7 +107,77 @@ public class ModConfigManager {
         }
     }
 
-    public static java.util.List<EventDefinition> getEvents() {
+    public static List<EventDefinition> getEvents() {
         return loadedEvents;
+    }
+
+    public static TopicDefinition loadTopic(String filename) {
+        File file = TOPICS_DIR.resolve(filename).toFile();
+        if (file.exists()) {
+            try (FileReader reader = new FileReader(file)) {
+                TopicDefinition topic = GSON.fromJson(reader, TopicDefinition.class);
+                if (topic != null) {
+                    topic.id = filename.replace(".json", ""); // Set ID from filename
+                }
+                return topic;
+            } catch (IOException e) {
+                EducationMod.LOGGER.error("Failed to load topic " + filename, e);
+            }
+        }
+        return null;
+    }
+
+    public static class TopicDefinition {
+        public String id; // Added ID field
+        public List<QuestionDefinition> questions;
+    }
+
+    public static class QuestionDefinition {
+        public String question;
+        public List<String> incorrect_answers;
+        public String correct_answer;
+        public List<String> flags; // Added flags field
+    }
+
+    // --- Course Structure ---
+
+    public static class CourseDefinition {
+        public String id;
+        public String title;
+        public String description;
+        public List<BookDefinition> books = new ArrayList<>();
+    }
+
+    public static class BookDefinition {
+        public String title;
+        public List<ChapterDefinition> chapters = new ArrayList<>();
+    }
+
+    public static class ChapterDefinition {
+        public String title;
+        public String content_file; // Points to a Topic (JSON) or Text file
+        public String type; // "QUIZ", "TEXT", "VIDEO" (external link)
+    }
+
+    public static void loadCourses() {
+        loadedCourses.clear();
+        File[] files = COURSES_DIR.toFile().listFiles((d, name) -> name.endsWith(".json"));
+        if (files != null) {
+            for (File file : files) {
+                try (FileReader reader = new FileReader(file)) {
+                    CourseDefinition course = GSON.fromJson(reader, CourseDefinition.class);
+                    if (course != null) {
+                        loadedCourses.add(course);
+                        EducationMod.LOGGER.info("Loaded course: " + course.title);
+                    }
+                } catch (IOException e) {
+                    EducationMod.LOGGER.error("Failed to load course " + file.getName(), e);
+                }
+            }
+        }
+    }
+
+    public static List<CourseDefinition> getCourses() {
+        return loadedCourses;
     }
 }
