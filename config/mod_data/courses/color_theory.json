@@ -1,17 +1,35 @@
 {
     "id": "color_theory",
-    "title": "Color Theory",
-    "description": "Learn the basics of colors and mixing.",
+    "title": "Color Theory & Hex Codes",
+    "description": "Master the art of digital color, from basic mixing to hexadecimal notation.",
     "books": [
         {
-            "id": "basics",
-            "title": "The Basics",
+            "title": "Book 1: The Basics",
             "chapters": [
                 {
-                    "id": "mixing_colors",
-                    "title": "Mixing Colors",
-                    "type": "QUIZ",
-                    "content_file": "mixing_colors.json"
+                    "title": "Primary Colors",
+                    "content_file": "mixing_colors.json",
+                    "type": "QUIZ"
+                }
+            ]
+        },
+        {
+            "title": "Book 2: Digital Colors",
+            "chapters": [
+                {
+                    "title": "Intro to Hex Codes",
+                    "content_file": "hex_codes.json",
+                    "type": "QUIZ"
+                }
+            ]
+        },
+        {
+            "title": "Book 3: Advanced Mixing",
+            "chapters": [
+                {
+                    "title": "Complex Recipes",
+                    "content_file": "advanced_mixing.json",
+                    "type": "QUIZ"
                 }
             ]
         }

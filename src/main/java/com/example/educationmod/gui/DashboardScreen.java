@@ -30,6 +30,26 @@ public class DashboardScreen extends Screen {
         // Back Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> this.client.setScreen(parent))
                 .dimensions(center - 100, this.height - 40, 200, 20).build());
+
+        // Export Data Button
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("Copy Data to Clipboard"), button -> {
+            String weakTopic = PlayerStats.getInstance().getWeakestTopic();
+            StringBuilder sb = new StringBuilder();
+            sb.append("=== Education Mod Data ===\n");
+            sb.append("Weakest Topic: ").append(weakTopic).append("\n");
+            if (weakTopic != null) {
+                sb.append("Confidence: ").append(PlayerStats.getInstance().topicConfidence.getOrDefault(weakTopic, 0.0))
+                        .append("\n");
+                sb.append("Streak: ").append(PlayerStats.getInstance().topicStreaks.getOrDefault(weakTopic, 0))
+                        .append("\n");
+            }
+            sb.append("Total Quizzes: ")
+                    .append(PlayerStats.getInstance().quizzesTaken.values().stream().mapToInt(Integer::intValue).sum())
+                    .append("\n");
+
+            this.client.keyboard.setClipboard(sb.toString());
+            button.setMessage(Text.literal("Copied!"));
+        }).dimensions(center - 100, this.height - 70, 200, 20).build());
     }
 
     @Override
@@ -64,6 +84,44 @@ public class DashboardScreen extends Screen {
             context.drawTextWithShadow(this.textRenderer, "Review " + weakTopic, center + 50, y, 0xFFFF55);
         } else {
             context.drawTextWithShadow(this.textRenderer, "Explore new topics!", center + 50, y, 0x55FFFF);
+        }
+        y += 40;
+
+        // --- Analysis View (Variables) ---
+        context.drawCenteredTextWithShadow(this.textRenderer, "--- Analysis View ---", center, y, 0x888888);
+        y += 20;
+
+        if (weakTopic != null) {
+            double confidence = PlayerStats.getInstance().topicConfidence.getOrDefault(weakTopic, 0.0) * 100;
+            int streak = PlayerStats.getInstance().topicStreaks.getOrDefault(weakTopic, 0);
+
+            context.drawTextWithShadow(this.textRenderer, "Topic:", center - 150, y, 0xAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, weakTopic, center + 50, y, 0xFFFFFF);
+            y += 15;
+
+            context.drawTextWithShadow(this.textRenderer, "Confidence:", center - 150, y, 0xAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, String.format("%.1f%%", confidence), center + 50, y,
+                    confidence > 80 ? 0x55FF55 : 0xFF5555);
+            y += 15;
+
+            context.drawTextWithShadow(this.textRenderer, "Streak:", center - 150, y, 0xAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, String.valueOf(streak), center + 50, y,
+                    streak > 3 ? 0x55FFFF : 0xFFFFFF);
+            y += 25;
+
+            // --- Simple Bar Chart (Confidence) ---
+            int barWidth = 200;
+            int barHeight = 10;
+            int filledWidth = (int) (barWidth * (confidence / 100.0));
+
+            context.fill(center - 100, y, center - 100 + barWidth, y + barHeight, 0xFF444444); // Background
+            context.fill(center - 100, y, center - 100 + filledWidth, y + barHeight,
+                    confidence > 80 ? 0xFF55FF55 : 0xFFFF5555); // Bar
+            y += 20;
+
+        } else {
+            context.drawCenteredTextWithShadow(this.textRenderer, "No data available yet.", center, y, 0xAAAAAA);
+            y += 40;
         }
 
         super.render(context, mouseX, mouseY, delta);

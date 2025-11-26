@@ -1,0 +1,40 @@
+{
+    "questions": [
+        {
+            "question": "In Minecraft, what dye comes from Lapis Lazuli?",
+            "correct_answer": "Blue Dye",
+            "incorrect_answers": [
+                "Cyan Dye",
+                "Light Blue Dye",
+                "Purple Dye"
+            ]
+        },
+        {
+            "question": "How do you make Orange Dye?",
+            "correct_answer": "Red Dye + Yellow Dye",
+            "incorrect_answers": [
+                "Red Dye + White Dye",
+                "Yellow Dye + Blue Dye",
+                "Orange Tulip"
+            ]
+        },
+        {
+            "question": "What is the result of mixing Blue Dye and Green Dye?",
+            "correct_answer": "Cyan Dye",
+            "incorrect_answers": [
+                "Light Blue Dye",
+                "Lime Dye",
+                "Purple Dye"
+            ]
+        },
+        {
+            "question": "Which flower gives Light Gray Dye?",
+            "correct_answer": "Azure Bluet",
+            "incorrect_answers": [
+                "Dandelion",
+                "Poppy",
+                "Blue Orchid"
+            ]
+        }
+    ]
+}

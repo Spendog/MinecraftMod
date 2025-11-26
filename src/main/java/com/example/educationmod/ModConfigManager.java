@@ -42,6 +42,7 @@ public class ModConfigManager {
     }
 
     private static void createExampleFiles() {
+        // ... (Existing example files) ...
         File exampleTopic = TOPICS_DIR.resolve("example_quiz.json").toFile();
         if (!exampleTopic.exists()) {
             try (FileWriter writer = new FileWriter(exampleTopic)) {
@@ -59,6 +60,40 @@ public class ModConfigManager {
             }
         }
 
+        // Color Theory Topics
+        createFileIfNotExists(TOPICS_DIR.resolve("mixing_colors.json"), "{\n" +
+                "  \"questions\": [\n" +
+                "    { \"question\": \"Red + Blue = ?\", \"correct_answer\": \"Purple\", \"incorrect_answers\": [\"Green\", \"Orange\"] }\n"
+                +
+                "  ]\n" +
+                "}");
+
+        createFileIfNotExists(TOPICS_DIR.resolve("hex_codes.json"), "{\n" +
+                "  \"questions\": [\n" +
+                "    { \"question\": \"Hex for White?\", \"correct_answer\": \"#FFFFFF\", \"incorrect_answers\": [\"#000000\", \"#888888\"] }\n"
+                +
+                "  ]\n" +
+                "}");
+
+        // Color Theory Course
+        createFileIfNotExists(COURSES_DIR.resolve("color_theory.json"), "{\n" +
+                "  \"id\": \"color_theory\",\n" +
+                "  \"title\": \"Color Theory\",\n" +
+                "  \"description\": \"Master the art of color.\",\n" +
+                "  \"books\": [\n" +
+                "    {\n" +
+                "      \"title\": \"Basics\",\n" +
+                "      \"chapters\": [ { \"title\": \"Mixing\", \"content_file\": \"mixing_colors.json\", \"type\": \"QUIZ\" } ]\n"
+                +
+                "    },\n" +
+                "    {\n" +
+                "      \"title\": \"Digital\",\n" +
+                "      \"chapters\": [ { \"title\": \"Hex Codes\", \"content_file\": \"hex_codes.json\", \"type\": \"QUIZ\" } ]\n"
+                +
+                "    }\n" +
+                "  ]\n" +
+                "}");
+
         File exampleEvent = EVENTS_DIR.resolve("example_event.json").toFile();
         if (!exampleEvent.exists()) {
             try (FileWriter writer = new FileWriter(exampleEvent)) {
@@ -72,6 +107,17 @@ public class ModConfigManager {
                         "}");
             } catch (IOException e) {
                 EducationMod.LOGGER.error("Failed to create example event", e);
+            }
+        }
+    }
+
+    private static void createFileIfNotExists(Path path, String content) {
+        File file = path.toFile();
+        if (!file.exists()) {
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(content);
+            } catch (IOException e) {
+                EducationMod.LOGGER.error("Failed to create file " + file.getName(), e);
             }
         }
     }

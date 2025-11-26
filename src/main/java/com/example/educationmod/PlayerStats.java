@@ -18,7 +18,11 @@ public class PlayerStats {
 
     private static PlayerStats INSTANCE;
 
-    // Map of Topic ID -> Number of incorrect answers
+    // Map of Topic ID -> Confidence Score (0.0 to 1.0)
+    public Map<String, Double> topicConfidence = new HashMap<>();
+    // Map of Topic ID -> Current Streak
+    public Map<String, Integer> topicStreaks = new HashMap<>();
+    // Legacy fields (still used for weakness calculation)
     public Map<String, Integer> topicWeakness = new HashMap<>();
     public Map<String, Integer> quizzesTaken = new HashMap<>();
 
@@ -33,6 +37,14 @@ public class PlayerStats {
         if (STATS_FILE.exists()) {
             try (FileReader reader = new FileReader(STATS_FILE)) {
                 INSTANCE = GSON.fromJson(reader, PlayerStats.class);
+                if (INSTANCE.topicConfidence == null)
+                    INSTANCE.topicConfidence = new HashMap<>();
+                if (INSTANCE.topicStreaks == null)
+                    INSTANCE.topicStreaks = new HashMap<>();
+                if (INSTANCE.topicWeakness == null)
+                    INSTANCE.topicWeakness = new HashMap<>();
+                if (INSTANCE.quizzesTaken == null)
+                    INSTANCE.quizzesTaken = new HashMap<>();
             } catch (IOException e) {
                 e.printStackTrace();
                 INSTANCE = new PlayerStats();
@@ -53,13 +65,26 @@ public class PlayerStats {
     public void recordResult(String topicId, int score, int totalQuestions) {
         quizzesTaken.put(topicId, quizzesTaken.getOrDefault(topicId, 0) + 1);
 
-        // Simple weakness calculation: +1 weakness for every wrong answer, -1 for every
-        // correct (min 0)
+        // Weakness Calculation (Legacy but useful)
         int wrongAnswers = totalQuestions - score;
         int currentWeakness = topicWeakness.getOrDefault(topicId, 0);
-
         int newWeakness = Math.max(0, currentWeakness + wrongAnswers - score);
         topicWeakness.put(topicId, newWeakness);
+
+        // Confidence Calculation (Moving Average)
+        double currentConfidence = topicConfidence.getOrDefault(topicId, 0.5); // Default 50%
+        double quizPerformance = (double) score / totalQuestions;
+        // New confidence is weighted 70% old, 30% new
+        double newConfidence = (currentConfidence * 0.7) + (quizPerformance * 0.3);
+        topicConfidence.put(topicId, newConfidence);
+
+        // Streak Calculation
+        int currentStreak = topicStreaks.getOrDefault(topicId, 0);
+        if (score == totalQuestions) {
+            topicStreaks.put(topicId, currentStreak + 1);
+        } else {
+            topicStreaks.put(topicId, 0); // Reset streak on any mistake
+        }
 
         save();
     }

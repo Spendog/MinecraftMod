@@ -1,0 +1,49 @@
+{
+    "questions": [
+        {
+            "question": "What does the Hex code #FF0000 represent?",
+            "correct_answer": "Red",
+            "incorrect_answers": [
+                "Blue",
+                "Green",
+                "White"
+            ]
+        },
+        {
+            "question": "In Hex #RRGGBB, what is the max value for a channel?",
+            "correct_answer": "FF (255)",
+            "incorrect_answers": [
+                "100",
+                "99",
+                "ZZ"
+            ]
+        },
+        {
+            "question": "Which Hex code represents pure White?",
+            "correct_answer": "#FFFFFF",
+            "incorrect_answers": [
+                "#000000",
+                "#111111",
+                "#888888"
+            ]
+        },
+        {
+            "question": "What is the decimal value of Hex 'A'?",
+            "correct_answer": "10",
+            "incorrect_answers": [
+                "1",
+                "11",
+                "16"
+            ]
+        },
+        {
+            "question": "If Red is #FF0000 and Blue is #0000FF, what is Magenta?",
+            "correct_answer": "#FF00FF",
+            "incorrect_answers": [
+                "#FFFF00",
+                "#00FFFF",
+                "#000000"
+            ]
+        }
+    ]
+}

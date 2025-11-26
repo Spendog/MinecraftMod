@@ -1,0 +1,13 @@
+{
+    "activity": "CRAFTING_DYE",
+    "facts": [
+        "Primary colors (red, blue, yellow) cannot be created by mixing other colors.",
+        "Secondary colors are created by mixing two primary colors.",
+        "Complementary colors are opposite each other on the color wheel.",
+        "Mixing complementary colors creates neutral tones (browns and grays).",
+        "The RGB color model is additive - combining all colors makes white.",
+        "The CMY color model is subtractive - combining all colors makes black.",
+        "Hex codes represent colors using 6 digits: RRGGBB (Red, Green, Blue).",
+        "Each hex digit ranges from 0-9 and A-F (0-15 in decimal)."
+    ]
+}

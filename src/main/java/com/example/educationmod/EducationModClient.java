@@ -1,5 +1,6 @@
 package com.example.educationmod;
 
+import com.example.educationmod.gui.LearningHUD;
 import com.example.educationmod.gui.ModMenuScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -22,11 +23,10 @@ public class EducationModClient implements ClientModInitializer {
 
         // Register KeyBinding
         menuKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.educationmod.menu", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_M, // The keycode of the key
-                "category.educationmod.general" // The translation key of the keybinding's category.
-        ));
+                "key.educationmod.menu",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_M,
+                "category.educationmod.general"));
 
         // Register Tick Event to check for key press
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -47,6 +47,13 @@ public class EducationModClient implements ClientModInitializer {
                     }));
         });
 
-        EducationMod.LOGGER.info("EducationModClient Initialized. Keybinding 'M' registered.");
+        // Initialize v012 Immersive Learning Systems
+        PassiveLearningManager.init();
+        IdleDetector.init();
+        ChatQuizHandler.init();
+        LearningHUD.init();
+        TriggerRegistry.init();
+
+        EducationMod.LOGGER.info("EducationModClient Initialized with v012 Immersive Learning.");
     }
 }
