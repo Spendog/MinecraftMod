@@ -51,3 +51,15 @@ The system is code-complete. The next phase is **Content & Polish**.
     - Mine coal/diamond to fire triggers.
     - Wait for idle quiz.
     - Answer with `/edu` to see layers stack.
+
+## Development Philosophy & "Rules of Engagement"
+*Based on the successful v012-v014 development cycle.*
+
+1.  **The "Living" System**: Just as the mod treats learning as a growing stack, development should be iterative. Do not build "dead" features; build "living" engines that read external data (JSON).
+2.  **No Guesswork**: We succeeded by strictly following `task.md` and `implementation_plan.md`. If in doubt, stop and check the docs.
+3.  **Layered Complexity**: We built the HUD (v012), then the Logic (v013), then the Integration (v014). Future updates should follow this "Foundation First" approach.
+4.  **User-Centric**: The "3D Puzzle" metaphor came from user feedback. Always prioritize the *feel* of learning over raw mechanics.
+5.  **Documentation is Code**: The `docs/` folder is not an afterthought. It is the save file. Update it *before* code.
+
+## Final Note
+This project is designed to grow. The `ModConfigManager` allows infinite content expansion without code changes. The `LayerManager` allows infinite depth. Keep the engine clean, and let the content drive the complexity.

@@ -6,15 +6,15 @@
 
 **STOP! READ THIS FIRST.**
 
-To ensure consistent growth and maintain the project's philosophy, please follow this workflow. Do not guess; follow the established path.
+To ensure consistent growth and maintain the project's philosophy, please follow this workflow. This repository is structured to allow seamless continuation of development across devices and sessions.
 
 ### 📂 Documentation & Handoff
-All development documentation is located in the `docs/` folder.
+All development documentation is located in the `docs/` folder. **You must read these to understand the "Why" and "How" before touching the code.**
 
-1.  **`docs/handoff.md`**: **START HERE.** This file contains the current system state, recent changes, and immediate next steps. It is the "save file" for our development process.
-2.  **`docs/task.md`**: The master checklist. Check this to see what is done and what is planned.
-3.  **`docs/walkthrough.md`**: A historical record of features and how they work. Consult this to understand existing systems before building new ones.
-4.  **`docs/implementation_plan.md`**: Technical details for the current/recent version.
+1.  **`docs/handoff.md`**: **START HERE.** The ultimate "Recall File." Contains system state, philosophy, and next steps.
+2.  **`docs/task.md`**: The master checklist.
+3.  **`docs/walkthrough.md`**: Historical record of features.
+4.  **`docs/implementation_plan.md`**: Technical details.
 
 ### 🧠 Core Philosophy (The "Why")
 *   **Immersive**: Learning happens *during* gameplay, not in a separate menu.
