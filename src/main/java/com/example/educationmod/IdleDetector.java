@@ -6,13 +6,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.*;
+
 /**
  * IdleDetector - Detects when the player is idle and triggers chat-based
  * quizzes
- * 
- * This is an OPTIONAL feature (off by default) that creates natural
- * "checkpoint"
- * moments for learning during gameplay pauses.
  */
 public class IdleDetector {
 
@@ -82,7 +80,6 @@ public class IdleDetector {
         // Get a random question from the weakest topic
         String weakTopic = PlayerStats.getInstance().getWeakestTopic();
         if (weakTopic == null) {
-            // No stats yet, use a random topic
             weakTopic = "color_theory";
         }
 
@@ -98,23 +95,37 @@ public class IdleDetector {
         ModConfigManager.QuestionDefinition question = topic.questions.get(
                 (int) (Math.random() * topic.questions.size()));
 
+        // Shuffle answers
+        List<String> allAnswers = new ArrayList<>(question.incorrect_answers);
+        allAnswers.add(question.correct_answer);
+        Collections.shuffle(allAnswers);
+
+        // Create answer mapping
+        Map<String, String> answerMapping = new HashMap<>();
+        char option = 'A';
+        String correctLetter = null;
+
         // Send quiz to chat
         client.player.sendMessage(Text.literal("§6[EduMod] §eQuick Check!"), false);
         client.player.sendMessage(Text.literal("§f" + question.question), false);
 
-        // Send answer options
-        char option = 'A';
-        for (String answer : question.incorrect_answers) {
+        // Send shuffled answers
+        for (String answer : allAnswers) {
+            String letter = String.valueOf(option);
+            answerMapping.put(letter, answer);
+
+            if (answer.equals(question.correct_answer)) {
+                correctLetter = letter;
+            }
+
             client.player.sendMessage(Text.literal("§7" + option + ") §f" + answer), false);
             option++;
         }
-        // Add correct answer in random position (simplified - should shuffle)
-        client.player.sendMessage(Text.literal("§7" + option + ") §f" + question.correct_answer), false);
 
         client.player.sendMessage(Text.literal("§7Reply with: §e/edu <A/B/C/D>"), false);
 
-        // Store current quiz in ChatQuizHandler
-        ChatQuizHandler.getInstance().setActiveQuiz(question, topic.id);
+        // Store current quiz in ChatQuizHandler with all parameters
+        ChatQuizHandler.getInstance().setActiveQuiz(question, topic.id, answerMapping, correctLetter);
     }
 
     public void setEnabled(boolean enabled) {

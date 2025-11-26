@@ -6,11 +6,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * ChatQuizHandler - Handles chat-based quiz interactions
- * 
- * Allows players to answer quizzes via /edu command without opening a GUI.
- * This keeps the player in their flow state during gameplay.
+ * ChatQuizHandler - Handles chat-based quiz interactions with layer integration
  */
 public class ChatQuizHandler {
 
@@ -19,7 +19,8 @@ public class ChatQuizHandler {
     // Current active quiz
     private ModConfigManager.QuestionDefinition activeQuestion = null;
     private String activeTopicId = null;
-    private long quizStartTime = 0;
+    private Map<String, String> answerMapping = new HashMap<>();
+    private String correctLetter = null;
 
     private ChatQuizHandler() {
     }
@@ -46,10 +47,12 @@ public class ChatQuizHandler {
         });
     }
 
-    public void setActiveQuiz(ModConfigManager.QuestionDefinition question, String topicId) {
+    public void setActiveQuiz(ModConfigManager.QuestionDefinition question, String topicId,
+            Map<String, String> mapping, String correctLetter) {
         this.activeQuestion = question;
         this.activeTopicId = topicId;
-        this.quizStartTime = System.currentTimeMillis();
+        this.answerMapping = mapping;
+        this.correctLetter = correctLetter;
     }
 
     private void handleAnswer(String answer) {
@@ -60,28 +63,43 @@ public class ChatQuizHandler {
             return;
         }
 
-        // Map letter to answer (simplified - should match the actual order sent)
-        // For prototype, just check if answer contains correct text
-        boolean correct = answer.equalsIgnoreCase("D"); // Placeholder logic
-
-        // Better logic: check if the letter maps to correct answer
-        // This requires storing the answer mapping when quiz is sent
+        // Check if answer is correct
+        boolean correct = answer.equalsIgnoreCase(correctLetter);
 
         if (correct) {
             client.player.sendMessage(Text.literal("§a[EduMod] ✓ Correct! Well done!"), false);
             PlayerStats.getInstance().recordResult(activeTopicId, 1, 1);
 
-            // Play success sound (when we fix the API)
-            // client.getSoundManager().play(...)
+            // Stack the related concept layer
+            String layerId = activeTopicId + "_layer_1"; // Simplified mapping
+            boolean stacked = com.example.educationmod.layers.LayerManager.getInstance().stackConcept(layerId);
+
+            if (stacked) {
+                int stackHeight = com.example.educationmod.layers.LayerManager.getInstance().getStackHeight(layerId);
+                client.player.sendMessage(Text.literal("§e[EduMod] 📚 Layer reinforced! Stack: " + stackHeight), false);
+            }
         } else {
             client.player.sendMessage(
-                    Text.literal("§c[EduMod] ✗ Not quite. The answer was: " + activeQuestion.correct_answer), false);
+                    Text.literal("§c[EduMod] ✗ Not quite. The answer was: §e" + correctLetter + ") "
+                            + activeQuestion.correct_answer),
+                    false);
             PlayerStats.getInstance().recordResult(activeTopicId, 0, 1);
+
+            // Show missing prerequisites if any
+            String layerId = activeTopicId + "_layer_1";
+            java.util.List<String> missing = com.example.educationmod.layers.LayerManager.getInstance()
+                    .getMissingPrerequisites(layerId);
+
+            if (!missing.isEmpty()) {
+                client.player.sendMessage(Text.literal("§7[EduMod] 💡 Foundation needed: Learn basics first"), false);
+            }
         }
 
         // Clear active quiz
         activeQuestion = null;
         activeTopicId = null;
+        answerMapping.clear();
+        correctLetter = null;
     }
 
     public boolean hasActiveQuiz() {

@@ -1,43 +1,45 @@
-# MinecraftMod
-for education
+# MinecraftMod: Layered Learning Engine (Fabric 1.21.5)
 
-# MinecraftMod: Trigger-Event Engine (Fabric 1.21.5)
-
-**Goal:** Porting a modular design to Fabric 1.21.5. A "Trigger-Event Engine" driven by external JSON files, designed for offline interaction with Hypixel Skyblock (local processing).
+**Goal:** A "Layered Compositional Learning System" driven by external JSON files. It treats learning as a "3D puzzle" where concepts stack to build deep understanding.
 
 ## Core Philosophy
-The mod does not have hardcoded gameplay. It reads JSON files to decide what to watch for and what to do.
+1.  **Immersive Learning**: Facts stream in naturally via HUD (v012).
+2.  **Layered Concepts**: Understanding is built by stacking "concept layers" (v013).
+3.  **Trigger-Event Engine**: Gameplay actions (mining, crafting) trigger learning moments (v014).
 
 ## Architecture
 
-### 1. The Data Structure (The Brain)
+### 1. The Brain (Data)
 **`ModConfigManager`** reads/writes to `.minecraft/config/mod_data/`.
+*   **`topics/`**: Quiz Questions with tags, sections, and difficulty.
+*   **`events/`**: Triggers (e.g., `mining_diamond.json`).
 
-*   **`topics/`**: Stores Quiz Questions (e.g., `math.json`, `renal_failure.json`).
-*   **`events/`**: Stores Logic (e.g., `mining_diamond.json`, `slayer_spawn.json`).
+### 2. The Triggers (Events)
+**`TriggerRegistry`** listens for Fabric Events:
+*   **`BlockBreakEvent`**: Mining specific blocks.
+*   **`UseItemEvent`**: Using specific items.
+*   **`IdleDetector`**: Natural pauses in gameplay.
 
-### 2. The Event System (The Triggers)
-**`TriggerRegistry`** listens for specific Fabric Events:
+### 3. The Layers (Learning)
+**`LayerManager`** tracks conceptual progress:
+*   **Stacking**: Correct quiz answers add to the stack.
+*   **Prerequisites**: Advanced layers require foundation layers.
+*   **Reinforcement**: Repetition strengthens the stack.
 
-*   **`BlockBreakEvent`**: Condition: specific BlockID.
-*   **`UseItemEvent`**: Condition: specific ItemID.
-*   **`ClientChatReceivedEvent`**: Condition: Regex String Match (e.g., for Slayer Bosses).
+### 4. The GUI (Interaction)
+*   **`LearningHUD`**: Passive fact ticker and streak counter.
+*   **`DashboardScreen`**: Visualizes layer stacks and learning progress.
+*   **`TriggerEditorScreen`**: Shows active triggers and statistics.
+*   **`ModMenuScreen`**: Central hub for all tools.
 
-### 3. The Action System (The Output)
-When a Trigger fires (e.g., Chat detects "Revenant Horror"), execute the Action defined in the JSON:
-
-*   **Action A (Quiz)**: Open `QuizScreen` (loads data from `topics/renal.json`).
-*   **Action B (Input Lock)**: Cancel `AttackPacket` until Quiz is resolved.
-*   **Action C (Command)**: Execute `/say Hello`.
-
-### 4. The GUI (The Editor)
-**`ModMenuScreen`** (accessed via `/modmenu`):
-
-*   Lists all loaded JSON files.
-*   *(Future Goal)* Allows editing these JSONs in-game.
+## Key Features (v014)
+*   **Chat Quizzes**: `/edu` command for seamless answering.
+*   **Layer Integration**: Correct answers stack concepts automatically.
+*   **Trigger Tracking**: See exactly when and how often triggers fire.
+*   **Detailed Logging**: Export learning data to clipboard for analysis.
 
 ## Implementation Roadmap
-1.  **Setup**: Initialize Fabric 1.21.5 workspace.
-2.  **Core**: Build `ModConfigManager` and `TriggerRegistry`.
-3.  **Actions**: Implement the Action System and Quiz Logic.
-4.  **UI**: Create the `ModMenuScreen`.
+*   ✅ **v012**: Immersive Learning (HUD, Idle Quizzes)
+*   ✅ **v013**: Layered System (Concept Stacks, Balance Engine)
+*   ✅ **v014**: Integration (Triggers -> Quizzes -> Layers)
+*   ⬜ **v015**: Content Expansion (Geology, Color Theory Deep Dive)
