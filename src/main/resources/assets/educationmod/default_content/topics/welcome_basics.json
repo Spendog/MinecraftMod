@@ -1,0 +1,36 @@
+{
+    "id": "welcome_basics",
+    "name": "Welcome to Education Mod",
+    "questions": [
+        {
+            "question": "What key activates the Developer Console?",
+            "correct_answer": "~ (Tilde/Grave Accent)",
+            "explanation": "Press ~ to open the console and debug the mod in real-time.",
+            "wrong_answers": [
+                "F3",
+                "Tab",
+                "Escape"
+            ]
+        },
+        {
+            "question": "How do you answer a quiz?",
+            "correct_answer": "/edu <your answer>",
+            "explanation": "Type /edu followed by your answer. You can use full sentences!",
+            "wrong_answers": [
+                "Click the answer",
+                "Press Enter",
+                "Type in chat"
+            ]
+        },
+        {
+            "question": "What happens when you answer incorrectly?",
+            "correct_answer": "The mod logs it as a knowledge gap",
+            "explanation": "Wrong answers are tracked so you can review them later with the 'study' command.",
+            "wrong_answers": [
+                "You lose points",
+                "The quiz resets",
+                "Nothing happens"
+            ]
+        }
+    ]
+}

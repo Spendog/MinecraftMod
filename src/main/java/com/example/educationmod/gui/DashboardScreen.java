@@ -90,6 +90,59 @@ public class DashboardScreen extends Screen {
         String guessRate = "§7Informed Choices: §aImproving";
         context.drawText(this.textRenderer, guessRate, 30, y, 0xFFFFFF, true);
 
+        // Render Layer Graph
+        renderLayerGraph(context, this.width / 2 + 20, 60);
+
         super.render(context, mouseX, mouseY, delta);
+    }
+
+    private void renderLayerGraph(DrawContext context, int x, int y) {
+        context.drawText(this.textRenderer, "§6Knowledge Graph:", x, y, 0xFFFFFF, true);
+        y += 20;
+
+        com.example.educationmod.layers.LayerManager layerManager = com.example.educationmod.layers.LayerManager
+                .getInstance();
+        Map<String, java.util.List<com.example.educationmod.layers.ConceptLayer>> topicLayers = layerManager
+                .getTopicLayers();
+
+        int topicIndex = 0;
+        int startX = x + 20;
+        int startY = y + 100; // Start from bottom
+
+        for (Map.Entry<String, java.util.List<com.example.educationmod.layers.ConceptLayer>> entry : topicLayers
+                .entrySet()) {
+            String topic = entry.getKey();
+            java.util.List<com.example.educationmod.layers.ConceptLayer> layers = entry.getValue();
+
+            int currentX = startX + (topicIndex * 80);
+            int currentY = startY;
+
+            // Draw topic label
+            context.drawText(this.textRenderer, topic, currentX, currentY + 25, 0xAAAAAA, true);
+
+            for (com.example.educationmod.layers.ConceptLayer layer : layers) {
+                boolean isLearned = layerManager.getStackHeight(layer.getId()) > 0;
+                int color = isLearned ? 0xFF55FF55 : 0xFF555555; // Green if learned, Gray if not
+                String label = layer.getId().replace(topic + "_", ""); // Shorten label
+
+                // Draw connection to previous (simplified vertical stack)
+                if (layers.indexOf(layer) > 0) {
+                    context.fill(currentX + 30, currentY + 20, currentX + 30, currentY + 30, 0xFF888888);
+                }
+
+                drawNode(context, currentX, currentY, label, color);
+                currentY -= 30; // Move up
+            }
+            topicIndex++;
+        }
+    }
+
+    private void drawNode(DrawContext context, int x, int y, String label, int color) {
+        context.fill(x, y, x + 60, y + 20, 0xFF202020); // Background
+        context.drawBorder(x, y, 60, 20, color); // Border
+        // Truncate label if too long
+        if (label.length() > 8)
+            label = label.substring(0, 8) + "..";
+        context.drawText(this.textRenderer, label, x + 5, y + 6, 0xFFFFFF, false);
     }
 }

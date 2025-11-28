@@ -20,6 +20,9 @@
         ],
         "client": [
             "com.example.educationmod.EducationModClient"
+        ],
+        "modmenu": [
+            "com.example.educationmod.ModMenuIntegration"
         ]
     },
     "mixins": [

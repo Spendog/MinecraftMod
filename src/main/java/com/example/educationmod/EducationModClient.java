@@ -28,10 +28,29 @@ public class EducationModClient implements ClientModInitializer {
                 GLFW.GLFW_KEY_M,
                 "category.educationmod.general"));
 
+        KeyBinding consoleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.educationmod.console",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_GRAVE_ACCENT,
+                "category.educationmod.general"));
+
         // Register Tick Event to check for key press
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (menuKeyBinding.wasPressed()) {
                 client.setScreen(new ModMenuScreen());
+            }
+
+            while (consoleKeyBinding.wasPressed()) {
+                com.example.educationmod.debug.DeveloperConsole.getInstance().toggle();
+                // State is now handled by DeveloperConsole toggling ModSettings
+                if (com.example.educationmod.debug.DeveloperConsole.getInstance().isVisible()) {
+                    client.setScreen(new com.example.educationmod.debug.DeveloperConsoleScreen(client.currentScreen));
+                } else {
+                    // If we toggle it off via key, close screen
+                    if (client.currentScreen instanceof com.example.educationmod.debug.DeveloperConsoleScreen) {
+                        client.setScreen(null);
+                    }
+                }
             }
         });
 

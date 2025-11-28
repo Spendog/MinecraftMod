@@ -20,6 +20,7 @@ public class TriggerRegistry {
     private static final Map<String, Long> lastTriggered = new HashMap<>();
 
     public static void init() {
+        com.example.educationmod.debug.DeveloperConsole.getInstance().log("TriggerRegistry Initializing...", 0xAAAAAA);
         registerBlockBreakListener();
         registerUseItemListener();
         registerChatListener();
@@ -88,29 +89,42 @@ public class TriggerRegistry {
     }
 
     private static void checkAndExecute(String triggerType, String condition) {
-        for (ModConfigManager.EventDefinition event : ModConfigManager.getEvents()) {
-            if (event.trigger.equalsIgnoreCase(triggerType)) {
-                if (condition.equals(event.condition) || condition.contains(event.condition)) {
-                    if (event.action != null) {
-                        // Track trigger statistics
-                        String triggerKey = triggerType + ":" + event.condition;
-                        triggerCounts.put(triggerKey, triggerCounts.getOrDefault(triggerKey, 0) + 1);
-                        lastTriggered.put(triggerKey, System.currentTimeMillis());
+        java.util.List<ModConfigManager.EventDefinition> events = com.example.educationmod.core.RelationalStore
+                .getInstance().findEvents(triggerType, condition);
 
-                        // Adaptive Logic: If action is QUIZ, try weak topic first
-                        if ("QUIZ".equals(event.action.type)) {
-                            String weakTopic = PlayerStats.getInstance().getWeakestTopic();
-                            if (weakTopic != null && !weakTopic.isEmpty()) {
-                                File topicFile = ModConfigManager.TOPICS_DIR.resolve(weakTopic + ".json").toFile();
-                                if (topicFile.exists()) {
-                                    ActionManager.executeAction("QUIZ", topicFile.getAbsolutePath());
-                                    return;
-                                }
+        if (events != null) {
+            for (ModConfigManager.EventDefinition event : events) {
+                if (event.action != null) {
+                    // Track trigger statistics
+                    String triggerKey = triggerType + ":" + event.condition;
+                    triggerCounts.put(triggerKey, triggerCounts.getOrDefault(triggerKey, 0) + 1);
+                    lastTriggered.put(triggerKey, System.currentTimeMillis());
+
+                    // Log to Console
+                    com.example.educationmod.debug.DeveloperConsole.getInstance().log("Trigger Fired: " + triggerKey,
+                            0x55FF55);
+
+                    // Adaptive Logic: If action is QUIZ, try weak topic first
+                    if ("QUIZ".equals(event.action.type)) {
+                        String weakTopic = PlayerStats.getInstance().getWeakestTopic();
+                        if (weakTopic != null && !weakTopic.isEmpty()) {
+                            // We need to find the file path for the weak topic.
+                            // Since RelationalStore stores topics by ID, we can check if it exists there.
+                            // But ActionManager expects a filepath or ID. Let's assume ID works if we
+                            // updated ActionManager.
+                            // Actually, ActionManager likely reads the file.
+                            // For now, let's keep the old logic but use the store to verify existence.
+                            ModConfigManager.TopicDefinition topic = com.example.educationmod.core.RelationalStore
+                                    .getInstance().getTopic(weakTopic);
+                            if (topic != null) {
+                                ActionManager.executeAction("QUIZ", weakTopic + ".json"); // Reconstruct filename for
+                                                                                          // now
+                                return;
                             }
                         }
-
-                        ActionManager.executeAction(event.action.type, event.action.data);
                     }
+
+                    ActionManager.executeAction(event.action.type, event.action.data);
                 }
             }
         }

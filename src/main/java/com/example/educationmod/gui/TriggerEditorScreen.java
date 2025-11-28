@@ -31,9 +31,22 @@ public class TriggerEditorScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> this.client.setScreen(parent))
                 .dimensions(center - 100, this.height - 40, 200, 20).build());
 
-        // Add Trigger Button (Placeholder for now)
+        // Add Trigger Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("+ Add Trigger"), button -> {
-            // Future: Open Trigger Creation Screen
+            this.client.setScreen(new ItemSelectionScreen(this, selectedId -> {
+                // For now, just log it or add a dummy event
+                // In a real app, we'd open a full configuration screen for the trigger
+                // Here we just add a dummy BLOCK_BREAK trigger for the selected item
+                ModConfigManager.EventDefinition newEvent = new ModConfigManager.EventDefinition();
+                newEvent.trigger = "BLOCK_BREAK";
+                newEvent.condition = selectedId;
+                newEvent.action = new ModConfigManager.ActionDefinition();
+                newEvent.action.type = "QUIZ";
+                newEvent.action.data = "example_quiz.json";
+
+                ModConfigManager.getEvents().add(newEvent);
+                this.client.setScreen(this); // Return to this screen
+            }));
         }).dimensions(center - 100, 30, 200, 20).build());
     }
 
@@ -55,20 +68,19 @@ public class TriggerEditorScreen extends Screen {
                 String conditionText = "Condition: " + (event.condition != null ? event.condition : "None");
                 String actionText = "Action: " + event.action.type + " (" + event.action.data + ")";
 
-                context.drawTextWithShadow(this.textRenderer, triggerText, center - 150, y, 0xFFAAAA);
-                context.drawTextWithShadow(this.textRenderer, conditionText, center + 10, y, 0xAAAAAA);
+                // Force integer coordinates to prevent sub-pixel blurring
+                int textY = (int) y;
+                int textCenterX = (int) center;
+
+                context.drawText(this.textRenderer, triggerText, textCenterX - 150, textY, 0xFFAAAA, false);
+                context.drawText(this.textRenderer, conditionText, textCenterX + 10, textY, 0xAAAAAA, false);
 
                 // Edit Button (Placeholder)
-                // Note: We can't easily add buttons in render(), so we'd normally do this in
-                // init() with a scroll list.
-                // For this prototype, we'll just show the text. To make it interactive, we need
-                // a proper list widget.
-                // For now, let's just render a "fake" button text or similar to indicate
-                // intent.
-                context.drawTextWithShadow(this.textRenderer, "[Edit]", center + 120, y, 0xFFFF55);
+                context.drawText(this.textRenderer, "[Edit]", textCenterX + 120, textY, 0xFFFF55, false);
 
                 y += 15;
-                context.drawTextWithShadow(this.textRenderer, actionText, center - 140, y, 0xAAFFAA);
+                textY = (int) y;
+                context.drawText(this.textRenderer, actionText, textCenterX - 140, textY, 0xAAFFAA, false);
                 y += 25;
             }
         }

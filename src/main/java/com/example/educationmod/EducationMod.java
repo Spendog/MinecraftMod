@@ -14,6 +14,7 @@ public class EducationMod implements ModInitializer {
 
 		// Initialize Managers
 		ModConfigManager.init();
+		ModSettings.load(); // Load settings
 		TriggerRegistry.init();
 	}
 }

@@ -47,7 +47,7 @@ public class IdleDetector {
     }
 
     private void tick(MinecraftClient client) {
-        if (!enabled || client.player == null || client.world == null) {
+        if (!ModSettings.isIdleQuizEnabled() || client.player == null || client.world == null) {
             return;
         }
 

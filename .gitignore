@@ -1,17 +1,29 @@
-build/
+# Gradle
 .gradle/
-run/
-bin/
+build/
+!build/libs/MinecraftEDU_v1.21.5-v024.jar
+!build/libs/MinecraftEDU_v1.21.5-v024-sources.jar
+
+# IDE
 .idea/
+*.iml
 *.ipr
 *.iws
-*.iml
-out/
 .vscode/
-.DS_Store
-*.log
-.settings/
 .classpath
 .project
-!run/config/mod_data/
-!run/logs/
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Minecraft
+run/
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~

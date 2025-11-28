@@ -30,10 +30,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // Roughly Enough Items
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:19.0.809"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:19.0.809"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:19.0.809"
+    // Mod Menu
+    modImplementation "com.terraformersmc:modmenu:14.0.0"
 }
 
 processResources {

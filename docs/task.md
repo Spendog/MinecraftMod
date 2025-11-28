@@ -1,295 +1,42 @@
-# Tasks
+# Development Tasks
 
-- [ ] Project Setup
-    - [x] Clone repository (Fresh start) <!-- id: 0 -->
-    - [x] Switch to `main` branch <!-- id: 5 -->
-    - [x] Explore codebase and identify build system <!-- id: 1 -->
-- [ ] Build and Run
-    - [x] Configure environment (Java version etc if needed) <!-- id: 2 -->
-    - [x] Run `gradlew` to build/run the mod <!-- id: 3 -->
-- [ ] Development
-    - [x] Core: Implement `ModConfigManager` (JSON handling) <!-- id: 6 -->
-    - [x] Core: Implement `TriggerRegistry` (Event listeners) <!-- id: 7 -->
-    - [x] Actions: Implement `QuizScreen` logic (Load JSON, dynamic buttons) <!-- id: 8 -->
-    - [x] UI: Implement `ModMenuScreen` editor <!-- id: 9 -->
-    - [x] Verification: Test in-game <!-- id: 10 -->
-- [ ] v002 Update
-    - [x] Update `gradle.properties` to Minecraft 1.21.5 <!-- id: 11 -->
-    - [x] Build v002 (Manual required due to network error) <!-- id: 12 -->
-    - [x] Verify v002 in-game (Ready for user verification) <!-- id: 13 -->
-- [ ] v003 Features
-    - [x] Update version to v003 <!-- id: 14 -->
-    - [x] Research REI Plugin API for 1.21.5 <!-- id: 15 -->
-    - [x] Implement REI Item Selection Screen (REI Integrated for lookup) <!-- id: 16 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [ ] Build v003 (Manual required) <!-- id: 18 -->
-- [ ] v004 Features
-    - [x] Rename command to `/edumenu` <!-- id: 19 -->
-    - [x] Implement Hypixel Skill Categories in Editor <!-- id: 20 -->
-    - [x] Implement Course/Book Structure <!-- id: 21 -->
-    - [x] Build v004 (Success! KeyBinding 'M' added) <!-- id: 22 -->
-- [ ] v005 Polish & Content
-    - [x] UI: Add Close Button and improve spacing <!-- id: 23 -->
-    - [x] UI: Implement "Premium" aesthetics (Gradients/Colors) <!-- id: 24 -->
-    - [x] Content: Create "Color Theory" Course & Quiz <!-- id: 25 -->
-    - [x] Feature: Implement Random Item Drop Trigger <!-- id: 26 -->
-    - [x] Build v005 (Success!) <!-- id: 27 -->
-- [ ] v006 Integrated Editor & Adaptive Learning
-    - [ ] Git: Secure v005 and content <!-- id: 28 -->
-    - [x] Feature: Add "Edit" button to Course Browser <!-- id: 29 -->
-    - [x] Feature: Implement "Save/Discard" in Editor <!-- id: 30 -->
-    - [x] Algorithm: Create PlayerStats and Adaptive Logic <!-- id: 31 -->
-    - [x] Build v006 (Success!) <!-- id: 32 -->
-- [ ] v007 Data-Driven Education
-    - [x] Feature: Implement LearningLogger <!-- id: 33 -->
-    - [x] Feature: Create DashboardScreen <!-- id: 34 -->
-    - [x] Feature: Implement Question Flagging <!-- id: 35 -->
-    - [x] Build v007 (Success!) <!-- id: 36 -->
-- [ ] v008 Refinement & Content
-    - [x] Content: Implement "Color Theory" Hex Code Chapters <!-- id: 37 -->
-    - [x] Algorithm: Upgrade to Adaptive Engine v2 (Confidence/Streaks) <!-- id: 38 -->
-    - [x] UI: Visual Polish (Animations, Consistency) <!-- id: 39 -->
-    - [x] Feature: Dashboard "Analysis View" (Variables/Values) <!-- id: 40 -->
-- [ ] v009 Fixes & Triggers
-# Tasks
+## Completed Versions (v002-v021)
+- [x] v002-v014: Core engine, layered learning, immersive mode
+- [x] v015-v017: Content expansion, visualizations, optimizations
+- [x] v018: Engine rewrite (Strict Relational Architecture)
+- [x] v019-v020: Documentation and polish
+- [x] v021: Recovery & stability (Console overlay, advanced querying)
 
-- [ ] Project Setup
-    - [x] Clone repository (Fresh start) <!-- id: 0 -->
-    - [x] Switch to `main` branch <!-- id: 5 -->
-    - [x] Explore codebase and identify build system <!-- id: 1 -->
-- [ ] Build and Run
-    - [x] Configure environment (Java version etc if needed) <!-- id: 2 -->
-    - [x] Run `gradlew` to build/run the mod <!-- id: 3 -->
-- [ ] Development
-    - [x] Core: Implement `ModConfigManager` (JSON handling) <!-- id: 6 -->
-    - [x] Core: Implement `TriggerRegistry` (Event listeners) <!-- id: 7 -->
-    - [x] Actions: Implement `QuizScreen` logic (Load JSON, dynamic buttons) <!-- id: 8 -->
-    - [x] UI: Implement `ModMenuScreen` editor <!-- id: 9 -->
-    - [x] Verification: Test in-game <!-- id: 10 -->
-- [ ] v002 Update
-    - [x] Update `gradle.properties` to Minecraft 1.21.5 <!-- id: 11 -->
-    - [x] Build v002 (Manual required due to network error) <!-- id: 12 -->
-    - [x] Verify v002 in-game (Ready for user verification) <!-- id: 13 -->
-- [ ] v003 Features
-    - [x] Update version to v003 <!-- id: 14 -->
-    - [x] Research REI Plugin API for 1.21.5 <!-- id: 15 -->
-    - [x] Implement REI Item Selection Screen (REI Integrated for lookup) <!-- id: 16 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [ ] Build v003 (Manual required) <!-- id: 18 -->
-- [ ] v004 Features
-    - [x] Rename command to `/edumenu` <!-- id: 19 -->
-    - [x] Implement Hypixel Skill Categories in Editor <!-- id: 20 -->
-    - [x] Implement Course/Book Structure <!-- id: 21 -->
-    - [x] Build v004 (Success! KeyBinding 'M' added) <!-- id: 22 -->
-- [ ] v005 Polish & Content
-    - [x] UI: Add Close Button and improve spacing <!-- id: 23 -->
-    - [x] UI: Implement "Premium" aesthetics (Gradients/Colors) <!-- id: 24 -->
-    - [x] Content: Create "Color Theory" Course & Quiz <!-- id: 25 -->
-    - [x] Feature: Implement Random Item Drop Trigger <!-- id: 26 -->
-    - [x] Build v005 (Success!) <!-- id: 27 -->
-- [ ] v006 Integrated Editor & Adaptive Learning
-    - [ ] Git: Secure v005 and content <!-- id: 28 -->
-    - [x] Feature: Add "Edit" button to Course Browser <!-- id: 29 -->
-    - [x] Feature: Implement "Save/Discard" in Editor <!-- id: 30 -->
-    - [x] Algorithm: Create PlayerStats and Adaptive Logic <!-- id: 31 -->
-    - [x] Build v006 (Success!) <!-- id: 32 -->
-- [ ] v007 Data-Driven Education
-    - [x] Feature: Implement LearningLogger <!-- id: 33 -->
-    - [x] Feature: Create DashboardScreen <!-- id: 34 -->
-    - [x] Feature: Implement Question Flagging <!-- id: 35 -->
-    - [x] Build v007 (Success!) <!-- id: 36 -->
-- [ ] v008 Refinement & Content
-    - [x] Content: Implement "Color Theory" Hex Code Chapters <!-- id: 37 -->
-    - [x] Algorithm: Upgrade to Adaptive Engine v2 (Confidence/Streaks) <!-- id: 38 -->
-    - [x] UI: Visual Polish (Animations, Consistency) <!-- id: 39 -->
-    - [x] Feature: Dashboard "Analysis View" (Variables/Values) <!-- id: 40 -->
-- [ ] v009 Fixes & Triggers
-    - [x] Fix: Ensure default Course generation <!-- id: 42 -->
-    - [x] Feature: Implement TriggerEditorScreen <!-- id: 43 -->
-    - [x] Feature: Implement SettingsScreen (Safe Mode) <!-- id: 44 -->
-    - [x] UI: Redesign ModMenuScreen (Dense/Next Goal) <!-- id: 45 -->
-- [ ] v010 Refinement & Analytics
-    - [x] UI: Fix ModMenu Overlap & Consolidate Editing <!-- id: 47 -->
-    - [x] Feature: Upgrade TriggerEditor (Add/Edit buttons) <!-- id: 48 -->
-    - [x] Feature: Dashboard Data Export (Clipboard) <!-- id: 49 -->
-    - [x] Feature: Simple Analytics Graph (Bar Chart) <!-- id: 50 -->
-- [ ] v011 Rhythm & Polish
-    - [x] UI: Dynamic Layouts (Fix Overlaps) <!-- id: 52 -->
-    - [ ] Feature: Sound Feedback (Quiz/Triggers) <!-- id: 53 --> (Deferred due to API complexity)
-    - [ ] Feature: Crafting Triggers (Logic & Example) <!-- id: 54 --> (Deferred)
-    - [x] Build v011 (Success!) <!-- id: 55 -->
-- [ ] v012 Immersive Learning Mode
-    - [x] Core: PassiveLearningManager (Activity Tracking & Fact Streaming) <!-- id: 56 -->
-    - [x] Core: IdleDetector (Pause-Based Quiz Trigger) <!-- id: 57 -->
-    - [x] Feature: ChatQuizHandler (Command-Based Quizzes) <!-- id: 58 -->
-    - [x] UI: LearningHUD (Fact Ticker, Streak Counter, Tips) <!-- id: 59 -->
-    - [x] Data: Fact Definitions (geology.json, color_theory.json) <!-- id: 60 -->
-    - [x] Settings: Immersive Mode Toggle & Sliders <!-- id: 61 -->
-    - [x] Build v012 (Success!) <!-- id: 62 -->
-- [ ] v013 GUI Cleanup & Layered Learning
-    - [x] Audit: Review all GUI screens for outdated features <!-- id: 63 -->
-    - [x] Cleanup: ModMenuScreen (remove Next Goal, add layer progress) <!-- id: 64 -->
-    - [x] Cleanup: DashboardScreen (remove scores, show layer stacks) <!-- id: 65 -->
-    - [x] Feature: ConceptLayer (stackable concept system) <!-- id: 66 -->
-    - [x] Feature: LayerManager (stack tracking, prerequisites) <!-- id: 67 -->
-    - [x] Feature: BalanceEngine (auto-validation, gap detection) <!-- id: 68 -->
-    - [ ] Enhancement: QuizScreen (layer-aware feedback) <!-- id: 69 --> (Deferred to v014)
-    - [ ] Data: Layer JSONs (coal, color theory) <!-- id: 70 --> (Deferred to v014)
-    - [x] Build v013 (Success!) <!-- id: 71 -->
-- [ ] v014 Integration & Fixes
-    - [x] Fix: Chat quiz command (/edu) not working <!-- id: 72 -->
-# Tasks
+---
 
-- [ ] Project Setup
-    - [x] Clone repository (Fresh start) <!-- id: 0 -->
-    - [x] Switch to `main` branch <!-- id: 5 -->
-    - [x] Explore codebase and identify build system <!-- id: 1 -->
-- [ ] Build and Run
-    - [x] Configure environment (Java version etc if needed) <!-- id: 2 -->
-    - [x] Run `gradlew` to build/run the mod <!-- id: 3 -->
-- [ ] Development
-    - [x] Core: Implement `ModConfigManager` (JSON handling) <!-- id: 6 -->
-    - [x] Core: Implement `TriggerRegistry` (Event listeners) <!-- id: 7 -->
-    - [x] Actions: Implement `QuizScreen` logic (Load JSON, dynamic buttons) <!-- id: 8 -->
-    - [x] UI: Implement `ModMenuScreen` editor <!-- id: 9 -->
-    - [x] Verification: Test in-game <!-- id: 10 -->
-- [ ] v002 Update
-    - [x] Update `gradle.properties` to Minecraft 1.21.5 <!-- id: 11 -->
-    - [x] Build v002 (Manual required due to network error) <!-- id: 12 -->
-    - [x] Verify v002 in-game (Ready for user verification) <!-- id: 13 -->
-- [ ] v003 Features
-    - [x] Update version to v003 <!-- id: 14 -->
-    - [x] Research REI Plugin API for 1.21.5 <!-- id: 15 -->
-    - [x] Implement REI Item Selection Screen (REI Integrated for lookup) <!-- id: 16 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [ ] Build v003 (Manual required) <!-- id: 18 -->
-- [ ] v004 Features
-    - [x] Rename command to `/edumenu` <!-- id: 19 -->
-    - [x] Implement Hypixel Skill Categories in Editor <!-- id: 20 -->
-    - [x] Implement Course/Book Structure <!-- id: 21 -->
-    - [x] Build v004 (Success! KeyBinding 'M' added) <!-- id: 22 -->
-- [ ] v005 Polish & Content
-    - [x] UI: Add Close Button and improve spacing <!-- id: 23 -->
-    - [x] UI: Implement "Premium" aesthetics (Gradients/Colors) <!-- id: 24 -->
-    - [x] Content: Create "Color Theory" Course & Quiz <!-- id: 25 -->
-    - [x] Feature: Implement Random Item Drop Trigger <!-- id: 26 -->
-    - [x] Build v005 (Success!) <!-- id: 27 -->
-- [ ] v006 Integrated Editor & Adaptive Learning
-    - [ ] Git: Secure v005 and content <!-- id: 28 -->
-    - [x] Feature: Add "Edit" button to Course Browser <!-- id: 29 -->
-    - [x] Feature: Implement "Save/Discard" in Editor <!-- id: 30 -->
-    - [x] Algorithm: Create PlayerStats and Adaptive Logic <!-- id: 31 -->
-    - [x] Build v006 (Success!) <!-- id: 32 -->
-- [ ] v007 Data-Driven Education
-    - [x] Feature: Implement LearningLogger <!-- id: 33 -->
-    - [x] Feature: Create DashboardScreen <!-- id: 34 -->
-    - [x] Feature: Implement Question Flagging <!-- id: 35 -->
-    - [x] Build v007 (Success!) <!-- id: 36 -->
-- [ ] v008 Refinement & Content
-    - [x] Content: Implement "Color Theory" Hex Code Chapters <!-- id: 37 -->
-    - [x] Algorithm: Upgrade to Adaptive Engine v2 (Confidence/Streaks) <!-- id: 38 -->
-    - [x] UI: Visual Polish (Animations, Consistency) <!-- id: 39 -->
-    - [x] Feature: Dashboard "Analysis View" (Variables/Values) <!-- id: 40 -->
-- [ ] v009 Fixes & Triggers
-# Tasks
+## v022: Standardization & Mod Menu Integration
+- [x] Feature: Mod Menu Integration (ModMenuApi)
+- [ ] Refactor: Data-Driven Settings Screen
+- [ ] Security: Audit Console Logs for PII
 
-- [ ] Project Setup
-    - [x] Clone repository (Fresh start) <!-- id: 0 -->
-    - [x] Switch to `main` branch <!-- id: 5 -->
-    - [x] Explore codebase and identify build system <!-- id: 1 -->
-- [ ] Build and Run
-    - [x] Configure environment (Java version etc if needed) <!-- id: 2 -->
-    - [x] Run `gradlew` to build/run the mod <!-- id: 3 -->
-- [ ] Development
-    - [x] Core: Implement `ModConfigManager` (JSON handling) <!-- id: 6 -->
-    - [x] Core: Implement `TriggerRegistry` (Event listeners) <!-- id: 7 -->
-    - [x] Actions: Implement `QuizScreen` logic (Load JSON, dynamic buttons) <!-- id: 8 -->
-    - [x] UI: Implement `ModMenuScreen` editor <!-- id: 9 -->
-    - [x] Verification: Test in-game <!-- id: 10 -->
-- [ ] v002 Update
-    - [x] Update `gradle.properties` to Minecraft 1.21.5 <!-- id: 11 -->
-    - [x] Build v002 (Manual required due to network error) <!-- id: 12 -->
-    - [x] Verify v002 in-game (Ready for user verification) <!-- id: 13 -->
-- [ ] v003 Features
-    - [x] Update version to v003 <!-- id: 14 -->
-    - [x] Research REI Plugin API for 1.21.5 <!-- id: 15 -->
-    - [x] Implement REI Item Selection Screen (REI Integrated for lookup) <!-- id: 16 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [x] Implement In-Game JSON Editor GUI <!-- id: 17 -->
-    - [ ] Build v003 (Manual required) <!-- id: 18 -->
-- [ ] v004 Features
-    - [x] Rename command to `/edumenu` <!-- id: 19 -->
-    - [x] Implement Hypixel Skill Categories in Editor <!-- id: 20 -->
-    - [x] Implement Course/Book Structure <!-- id: 21 -->
-    - [x] Build v004 (Success! KeyBinding 'M' added) <!-- id: 22 -->
-- [ ] v005 Polish & Content
-    - [x] UI: Add Close Button and improve spacing <!-- id: 23 -->
-    - [x] UI: Implement "Premium" aesthetics (Gradients/Colors) <!-- id: 24 -->
-    - [x] Content: Create "Color Theory" Course & Quiz <!-- id: 25 -->
-    - [x] Feature: Implement Random Item Drop Trigger <!-- id: 26 -->
-    - [x] Build v005 (Success!) <!-- id: 27 -->
-- [ ] v006 Integrated Editor & Adaptive Learning
-    - [ ] Git: Secure v005 and content <!-- id: 28 -->
-    - [x] Feature: Add "Edit" button to Course Browser <!-- id: 29 -->
-    - [x] Feature: Implement "Save/Discard" in Editor <!-- id: 30 -->
-    - [x] Algorithm: Create PlayerStats and Adaptive Logic <!-- id: 31 -->
-    - [x] Build v006 (Success!) <!-- id: 32 -->
-- [ ] v007 Data-Driven Education
-    - [x] Feature: Implement LearningLogger <!-- id: 33 -->
-    - [x] Feature: Create DashboardScreen <!-- id: 34 -->
-    - [x] Feature: Implement Question Flagging <!-- id: 35 -->
-    - [x] Build v007 (Success!) <!-- id: 36 -->
-- [ ] v008 Refinement & Content
-    - [x] Content: Implement "Color Theory" Hex Code Chapters <!-- id: 37 -->
-    - [x] Algorithm: Upgrade to Adaptive Engine v2 (Confidence/Streaks) <!-- id: 38 -->
-    - [x] UI: Visual Polish (Animations, Consistency) <!-- id: 39 -->
-    - [x] Feature: Dashboard "Analysis View" (Variables/Values) <!-- id: 40 -->
-- [ ] v009 Fixes & Triggers
-    - [x] Fix: Ensure default Course generation <!-- id: 42 -->
-    - [x] Feature: Implement TriggerEditorScreen <!-- id: 43 -->
-    - [x] Feature: Implement SettingsScreen (Safe Mode) <!-- id: 44 -->
-    - [x] UI: Redesign ModMenuScreen (Dense/Next Goal) <!-- id: 45 -->
-- [ ] v010 Refinement & Analytics
-    - [x] UI: Fix ModMenu Overlap & Consolidate Editing <!-- id: 47 -->
-    - [x] Feature: Upgrade TriggerEditor (Add/Edit buttons) <!-- id: 48 -->
-    - [x] Feature: Dashboard Data Export (Clipboard) <!-- id: 49 -->
-    - [x] Feature: Simple Analytics Graph (Bar Chart) <!-- id: 50 -->
-- [ ] v011 Rhythm & Polish
-    - [x] UI: Dynamic Layouts (Fix Overlaps) <!-- id: 52 -->
-    - [ ] Feature: Sound Feedback (Quiz/Triggers) <!-- id: 53 --> (Deferred due to API complexity)
-    - [ ] Feature: Crafting Triggers (Logic & Example) <!-- id: 54 --> (Deferred)
-    - [x] Build v011 (Success!) <!-- id: 55 -->
-- [ ] v012 Immersive Learning Mode
-    - [x] Core: PassiveLearningManager (Activity Tracking & Fact Streaming) <!-- id: 56 -->
-    - [x] Core: IdleDetector (Pause-Based Quiz Trigger) <!-- id: 57 -->
-    - [x] Feature: ChatQuizHandler (Command-Based Quizzes) <!-- id: 58 -->
-    - [x] UI: LearningHUD (Fact Ticker, Streak Counter, Tips) <!-- id: 59 -->
-    - [x] Data: Fact Definitions (geology.json, color_theory.json) <!-- id: 60 -->
-    - [x] Settings: Immersive Mode Toggle & Sliders <!-- id: 61 -->
-    - [x] Build v012 (Success!) <!-- id: 62 -->
-- [ ] v013 GUI Cleanup & Layered Learning
-    - [x] Audit: Review all GUI screens for outdated features <!-- id: 63 -->
-    - [x] Cleanup: ModMenuScreen (remove Next Goal, add layer progress) <!-- id: 64 -->
-    - [x] Cleanup: DashboardScreen (remove scores, show layer stacks) <!-- id: 65 -->
-    - [x] Feature: ConceptLayer (stackable concept system) <!-- id: 66 -->
-    - [x] Feature: LayerManager (stack tracking, prerequisites) <!-- id: 67 -->
-    - [x] Feature: BalanceEngine (auto-validation, gap detection) <!-- id: 68 -->
-    - [ ] Enhancement: QuizScreen (layer-aware feedback) <!-- id: 69 --> (Deferred to v014)
-    - [ ] Data: Layer JSONs (coal, color theory) <!-- id: 70 --> (Deferred to v014)
-    - [x] Build v013 (Success!) <!-- id: 71 -->
-- [ ] v014 Integration & Fixes
-    - [x] Fix: Chat quiz command (/edu) not working <!-- id: 72 -->
-    - [x] Fix: Trigger visibility and status indicators <!-- id: 73 -->
-    - [x] Feature: Topic tags and sections <!-- id: 74 -->
-    - [x] Integration: Layer stacking from quiz results <!-- id: 75 -->
-    - [x] Enhancement: Layer-aware quiz feedback <!-- id: 76 -->
-    - [x] Enhancement: Logging with layer information <!-- id: 77 -->
-    - [x] Build v014 (Success!) <!-- id: 78 -->
-- [ ] Next Session (v015 & Beyond)
-    - [ ] Content: Create "Geology" Course with layers <!-- id: 79 -->
-    - [ ] Content: Expand "Color Theory" with sections <!-- id: 80 -->
-    - [ ] Feature: Visual Layer Graph in Dashboard <!-- id: 81 -->
-    - [ ] Feature: Sound Feedback (Quiz/Triggers) <!-- id: 82 -->
+## v023: Adaptive Learning Engine
+- [x] Feature: Text Input for Quizzes (ChatQuizHandler)
+- [x] Feature: Knowledge Gap Tracker (Log incorrect answers)
+- [x] Feature: Dynamic Study Set Generator (JSON output)
+- [x] Feature: Console 'study' command (Inspect gaps)
+
+## v024: Final Polish & Documentation
+- [x] Fix: Restore Learning HUD (Safety check for coords)
+- [x] Docs: Create README.md
+- [x] Docs: Finalize Handoff
+
+## v025: Deployment & Workflow System
+- [x] Create .gitignore (exclude old JARs)
+- [x] Create sample topic content (bundle with mod)
+- [x] Create DEVELOPER_ONBOARDING.md
+- [x] Create pre-push-check.bat script
+- [x] Create upgrade-mod.bat for users
+
+---
+
+## Next Session (v026+)
+**Focus Areas:**
+- [ ] Security: Complete PII audit of console logs
+- [ ] Refactor: Data-driven settings pattern
+- [ ] Content: Expand bundled topics beyond welcome_basics
+- [ ] Feature: Visual layer graph in dashboard

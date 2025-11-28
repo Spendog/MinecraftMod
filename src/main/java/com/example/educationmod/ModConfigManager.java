@@ -63,22 +63,23 @@ public class ModConfigManager {
         // Color Theory Topics
         createFileIfNotExists(TOPICS_DIR.resolve("mixing_colors.json"), "{\n" +
                 "  \"questions\": [\n" +
-                "    { \"question\": \"Red + Blue = ?\", \"correct_answer\": \"Purple\", \"incorrect_answers\": [\"Green\", \"Orange\"] }\n"
+                "    { \"question\": \"Red + Blue = ?\", \"correct_answer\": \"Purple\", \"incorrect_answers\": [\"Green\", \"Orange\"] },\n"
+                +
+                "    { \"question\": \"Blue + Yellow = ?\", \"correct_answer\": \"Green\", \"incorrect_answers\": [\"Purple\", \"Orange\"] },\n"
+                +
+                "    { \"question\": \"Red + Yellow = ?\", \"correct_answer\": \"Orange\", \"incorrect_answers\": [\"Green\", \"Purple\"] }\n"
                 +
                 "  ]\n" +
                 "}");
 
         createFileIfNotExists(TOPICS_DIR.resolve("hex_codes.json"), "{\n" +
                 "  \"questions\": [\n" +
-                "    { \"question\": \"Hex for White?\", \"correct_answer\": \"#FFFFFF\", \"incorrect_answers\": [\"#000000\", \"#888888\"] }\n"
+                "    { \"question\": \"Hex for White?\", \"correct_answer\": \"#FFFFFF\", \"incorrect_answers\": [\"#000000\", \"#888888\"] },\n"
                 +
-                "  ]\n" +
-                "}");
-
-        // Color Theory Course
-        createFileIfNotExists(COURSES_DIR.resolve("color_theory.json"), "{\n" +
-                "  \"id\": \"color_theory\",\n" +
-                "  \"title\": \"Color Theory\",\n" +
+                "    { \"question\": \"Hex for Black?\", \"correct_answer\": \"#000000\", \"incorrect_answers\": [\"#FFFFFF\", \"#111111\"] },\n"
+                +
+                "    { \"question\": \"Hex for Red?\", \"correct_answer\": \"#FF0000\", \"incorrect_answers\": [\"#00FF00\", \"#0000FF\"] }\n"
+                +
                 "  \"description\": \"Master the art of color.\",\n" +
                 "  \"books\": [\n" +
                 "    {\n" +
@@ -89,6 +90,20 @@ public class ModConfigManager {
                 "    {\n" +
                 "      \"title\": \"Digital\",\n" +
                 "      \"chapters\": [ { \"title\": \"Hex Codes\", \"content_file\": \"hex_codes.json\", \"type\": \"QUIZ\" } ]\n"
+                +
+                "    }\n" +
+                "  ]\n" +
+                "}");
+
+        // Geology Course
+        createFileIfNotExists(COURSES_DIR.resolve("geology.json"), "{\n" +
+                "  \"id\": \"geology\",\n" +
+                "  \"title\": \"Geology 101\",\n" +
+                "  \"description\": \"Study the earth beneath your feet.\",\n" +
+                "  \"books\": [\n" +
+                "    {\n" +
+                "      \"title\": \"Fundamentals\",\n" +
+                "      \"chapters\": [ { \"title\": \"Rock Types\", \"content_file\": \"geology_basics.json\", \"type\": \"QUIZ\" } ]\n"
                 +
                 "    }\n" +
                 "  ]\n" +
@@ -136,15 +151,19 @@ public class ModConfigManager {
     }
 
     public static void loadEvents() {
-        loadedEvents.clear();
+        com.example.educationmod.core.RelationalStore.getInstance().clear(); // Clear DB before loading
+
+        // Load Topics First (Dependencies)
+        loadTopics();
+
+        // Load Events
         File[] files = EVENTS_DIR.toFile().listFiles((d, name) -> name.endsWith(".json"));
         if (files != null) {
             for (File file : files) {
                 try (FileReader reader = new FileReader(file)) {
                     EventDefinition event = GSON.fromJson(reader, EventDefinition.class);
                     if (event != null) {
-                        loadedEvents.add(event);
-                        EducationMod.LOGGER.info("Loaded event from " + file.getName());
+                        com.example.educationmod.core.RelationalStore.getInstance().addEvent(event);
                     }
                 } catch (IOException e) {
                     EducationMod.LOGGER.error("Failed to load event " + file.getName(), e);
@@ -153,24 +172,33 @@ public class ModConfigManager {
         }
     }
 
+    public static void loadTopics() {
+        File[] files = TOPICS_DIR.toFile().listFiles((d, name) -> name.endsWith(".json"));
+        if (files != null) {
+            for (File file : files) {
+                try (FileReader reader = new FileReader(file)) {
+                    TopicDefinition topic = GSON.fromJson(reader, TopicDefinition.class);
+                    if (topic != null) {
+                        topic.id = file.getName().replace(".json", "");
+                        com.example.educationmod.core.RelationalStore.getInstance().addTopic(topic);
+                    }
+                } catch (IOException e) {
+                    EducationMod.LOGGER.error("Failed to load topic " + file.getName(), e);
+                }
+            }
+        }
+    }
+
     public static List<EventDefinition> getEvents() {
-        return loadedEvents;
+        // Deprecated: Should use RelationalStore directly, but keeping for
+        // compatibility if needed
+        // For now, return empty list or throw error to force migration
+        return new ArrayList<>();
     }
 
     public static TopicDefinition loadTopic(String filename) {
-        File file = TOPICS_DIR.resolve(filename).toFile();
-        if (file.exists()) {
-            try (FileReader reader = new FileReader(file)) {
-                TopicDefinition topic = GSON.fromJson(reader, TopicDefinition.class);
-                if (topic != null) {
-                    topic.id = filename.replace(".json", ""); // Set ID from filename
-                }
-                return topic;
-            } catch (IOException e) {
-                EducationMod.LOGGER.error("Failed to load topic " + filename, e);
-            }
-        }
-        return null;
+        // Redirect to Store
+        return com.example.educationmod.core.RelationalStore.getInstance().getTopic(filename.replace(".json", ""));
     }
 
     public static class TopicDefinition {
@@ -183,6 +211,7 @@ public class ModConfigManager {
         public List<String> incorrect_answers;
         public String correct_answer;
         public List<String> flags; // Added flags field
+        public String explanation; // Added explanation field
     }
 
     // --- Course Structure ---

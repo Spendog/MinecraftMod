@@ -38,9 +38,9 @@ public class ChatQuizHandler {
         // Register /edu command
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("edu")
-                    .then(ClientCommandManager.argument("answer", StringArgumentType.word())
+                    .then(ClientCommandManager.argument("answer", StringArgumentType.greedyString())
                             .executes(context -> {
-                                String answer = StringArgumentType.getString(context, "answer").toUpperCase();
+                                String answer = StringArgumentType.getString(context, "answer");
                                 getInstance().handleAnswer(answer);
                                 return 1;
                             })));
@@ -66,8 +66,11 @@ public class ChatQuizHandler {
         // Check if answer is correct
         boolean correct = answer.equalsIgnoreCase(correctLetter);
 
+        String explanation = activeQuestion.explanation != null ? " §7(" + activeQuestion.explanation + ")" : "";
+
         if (correct) {
-            client.player.sendMessage(Text.literal("§a[EduMod] ✓ Correct! Well done!"), false);
+            client.player.sendMessage(Text.literal("§a[EduMod] ✓ Correct! Well done!" + explanation), false);
+            client.player.playSound(SoundRegistry.QUIZ_CORRECT, 1.0f, 1.0f);
             PlayerStats.getInstance().recordResult(activeTopicId, 1, 1);
 
             // Stack the related concept layer
@@ -81,9 +84,17 @@ public class ChatQuizHandler {
         } else {
             client.player.sendMessage(
                     Text.literal("§c[EduMod] ✗ Not quite. The answer was: §e" + correctLetter + ") "
-                            + activeQuestion.correct_answer),
+                            + activeQuestion.correct_answer + explanation),
                     false);
+            client.player.playSound(SoundRegistry.QUIZ_INCORRECT, 1.0f, 1.0f);
             PlayerStats.getInstance().recordResult(activeTopicId, 0, 1);
+
+            // Log Knowledge Gap
+            com.example.educationmod.core.KnowledgeGapTracker.getInstance().logGap(
+                    activeTopicId,
+                    activeQuestion.question,
+                    answer,
+                    activeQuestion.correct_answer);
 
             // Show missing prerequisites if any
             String layerId = activeTopicId + "_layer_1";

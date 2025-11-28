@@ -1,5 +1,6 @@
 package com.example.educationmod.gui;
 
+import com.example.educationmod.ModSettings;
 import com.example.educationmod.PassiveLearningManager;
 import com.example.educationmod.PlayerStats;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -13,15 +14,7 @@ public class LearningHUD {
 
     private static LearningHUD INSTANCE;
 
-    // HUD Settings
-    private boolean enabled = true;
-    private int x = 10;
-    private int y = 10;
-    private int width = 200;
-    private int height = 60;
-    private float opacity = 0.7f;
-
-    // Content
+    // Local state for content only
     private String currentFact = "Welcome to Immersive Learning!";
     private long lastFactUpdate = 0;
 
@@ -45,7 +38,8 @@ public class LearningHUD {
     }
 
     public void render(DrawContext context) {
-        if (!enabled) {
+        // Immersive Mode hides the HUD
+        if (ModSettings.isImmersiveMode()) {
             return;
         }
 
@@ -60,6 +54,21 @@ public class LearningHUD {
             updateFact();
             lastFactUpdate = now;
         }
+
+        // Get settings from ModSettings
+        float opacity = ModSettings.getHudOpacity();
+        int x = ModSettings.getHudX();
+        int y = ModSettings.getHudY();
+
+        // Safety check: Reset if off-screen
+        if (x < 0 || y < 0) {
+            x = 10;
+            y = 10;
+            ModSettings.setHudX(10);
+            ModSettings.setHudY(10);
+        }
+        int width = 200;
+        int height = 60;
 
         // Calculate colors with opacity
         int bgColor = (int) (opacity * 255) << 24 | 0x000000;
@@ -107,31 +116,5 @@ public class LearningHUD {
             }
         }
         return maxStreak;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setOpacity(float opacity) {
-        this.opacity = Math.max(0.5f, Math.min(1.0f, opacity));
-    }
-
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void resetPosition() {
-        this.x = 10;
-        this.y = 10;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public float getOpacity() {
-        return opacity;
     }
 }

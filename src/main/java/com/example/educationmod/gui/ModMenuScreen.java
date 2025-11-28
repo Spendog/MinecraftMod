@@ -39,6 +39,15 @@ public class ModMenuScreen extends Screen {
 
         y += 35;
 
+        // Developer Tools
+        if (com.example.educationmod.ModSettings.isConsoleEnabled()) {
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("Developer Console"), button -> {
+                this.client.setScreen(new com.example.educationmod.debug.DeveloperConsoleScreen(this));
+            }).dimensions(center - 100, y, 200, 20).build());
+        }
+
+        y += 25;
+
         // File Editor
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Open File Editor"), button -> {
             this.client.setScreen(new FileSelectionScreen(this));

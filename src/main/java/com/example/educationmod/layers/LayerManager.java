@@ -3,6 +3,7 @@ package com.example.educationmod.layers;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.MinecraftClient;
+import com.example.educationmod.SoundRegistry;
 
 import java.io.File;
 import java.io.FileReader;
@@ -102,6 +103,11 @@ public class LayerManager {
         int currentHeight = learnedLayers.getOrDefault(layerId, 0);
         learnedLayers.put(layerId, currentHeight + 1);
         layer.setStackHeight(currentHeight + 1);
+
+        // Play sound
+        if (MinecraftClient.getInstance().player != null) {
+            MinecraftClient.getInstance().player.playSound(SoundRegistry.LAYER_COMPLETE, 1.0f, 1.0f);
+        }
 
         return true;
     }

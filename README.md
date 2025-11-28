@@ -1,54 +1,35 @@
-# MinecraftMod: Layered Learning Engine (Fabric 1.21.5)
+# Education Mod (v024)
 
-**Goal:** A "Layered Compositional Learning System" driven by external JSON files. It treats learning as a "3D puzzle" where concepts stack to build deep understanding.
+A Minecraft mod that turns gameplay into an immersive learning experience.
 
-## 🚀 Getting Started (For Developers)
+## Features
 
-**STOP! READ THIS FIRST.**
+### 🧠 Adaptive Learning Engine
+*   **Text Input Quizzes**: Answer questions in chat using natural language (e.g., `/edu Photosynthesis`).
+*   **Knowledge Gap Tracker**: The mod learns what you don't know and logs your mistakes.
+*   **Study Sets**: Generate personalized study guides (JSON) based on your knowledge gaps.
 
-To ensure consistent growth and maintain the project's philosophy, please follow this workflow. This repository is structured to allow seamless continuation of development across devices and sessions.
+### 🛠️ Developer Tools
+*   **Console Overlay**: Press `~` to open a real-time debug console.
+*   **Advanced Querying**: Use SQL-like commands (`select topics`, `select triggers`) to inspect the engine.
+*   **Visual Debugging**: See triggers fire and quizzes load in real-time.
 
-### 📂 Documentation & Handoff
-All development documentation is located in the `docs/` folder. **You must read these to understand the "Why" and "How" before touching the code.**
+### ⚙️ Customization
+*   **Mod Menu Support**: Configure settings via the standard "Mods" menu.
+*   **Immersive Mode**: Hide the HUD for a cleaner experience.
+*   **Safe Mode**: Disable dangerous triggers.
 
-1.  **`docs/handoff.md`**: **START HERE.** The ultimate "Recall File." Contains system state, philosophy, and next steps.
-2.  **`docs/task.md`**: The master checklist.
-3.  **`docs/walkthrough.md`**: Historical record of features.
-4.  **`docs/implementation_plan.md`**: Technical details.
+## Installation
+1.  Install **Fabric Loader** for Minecraft 1.21.5.
+2.  Install **Fabric API**.
+3.  Install **Mod Menu** (optional, for settings).
+4.  Drop `MinecraftEDU_v1.21.5-v024.jar` into your `mods` folder.
 
-### 🧠 Core Philosophy (The "Why")
-*   **Immersive**: Learning happens *during* gameplay, not in a separate menu.
-*   **Layered**: Concepts are "living pieces" that stack. You don't just "know" a fact; you build a foundation.
-*   **Data-Driven**: The mod is an engine. The *content* lives in JSON files.
+## Usage
+*   **Quizzes**: Play normally. Triggers (like breaking blocks) will spawn quizzes.
+*   **Answering**: Type `/edu <answer>` in chat.
+*   **Console**: Press `~` to open the developer console.
+*   **Study**: Type `study` in the console to see your knowledge gaps.
 
-## Architecture Overview
-
-### 1. The Brain (Data)
-**`ModConfigManager`** reads/writes to `.minecraft/config/mod_data/`.
-*   **`topics/`**: Quiz Questions with tags, sections, and difficulty.
-*   **`events/`**: Triggers (e.g., `mining_diamond.json`).
-
-### 2. The Triggers (Events)
-**`TriggerRegistry`** listens for Fabric Events:
-*   **`BlockBreakEvent`**: Mining specific blocks.
-*   **`UseItemEvent`**: Using specific items.
-*   **`IdleDetector`**: Natural pauses in gameplay.
-
-### 3. The Layers (Learning)
-**`LayerManager`** tracks conceptual progress:
-*   **Stacking**: Correct quiz answers add to the stack.
-*   **Prerequisites**: Advanced layers require foundation layers.
-*   **Reinforcement**: Repetition strengthens the stack.
-
-### 4. The GUI (Interaction)
-*   **`LearningHUD`**: Passive fact ticker and streak counter.
-*   **`DashboardScreen`**: Visualizes layer stacks and learning progress.
-*   **`TriggerEditorScreen`**: Shows active triggers and statistics.
-*   **`ModMenuScreen`**: Central hub for all tools.
-
-## How to Run
-1.  **Build**: `.\gradlew build`
-2.  **Run Client**: `.\gradlew runClient`
-
----
-*Maintained by the Antigravity Team. Validated for Fabric 1.21.5.*
+## Credits
+Developed by s&cgpt.
