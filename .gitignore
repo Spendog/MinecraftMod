@@ -22,8 +22,20 @@ Thumbs.db
 run/
 logs/
 
+# Logs
+*.log
+*.txt
+!README.md
+!docs/*.txt
+!LICENSE.txt
+
+# Old Artifacts
+EDU_Jars/
+debug_build_*.log
+
 # Temporary files
 *.tmp
 *.bak
 *.swp
 *~
+

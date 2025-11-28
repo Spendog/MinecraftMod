@@ -33,8 +33,10 @@ cat gradle.properties | Select-String "mod_version"
 
 ## 📐 Architecture (The Mental Model)
 
-### Core Principle: Data-Driven Engine
-**The mod is NOT hardcoded**. All content (quizzes, triggers, courses) lives in JSON files. The code is just an engine that reads and executes them.
+### Core Principle: Evolution Over Stability
+**The code is disposable.** The JSON data is the soul.
+- **Rule**: It is okay to break a feature if you are rebuilding it to be better.
+- **History**: Check `docs/design_evolution.md` to see *why* a feature exists in its current form before changing it.
 
 ### The Three Pillars
 

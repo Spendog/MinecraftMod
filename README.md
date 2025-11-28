@@ -1,6 +1,11 @@
 # Education Mod (v024)
 
-A Minecraft mod that turns gameplay into an immersive learning experience.
+> **Philosophy**: Code is ephemeral; Ideas are persistent. We value **growth over stability**. We are willing to break a feature to reintroduce it in a more perfect form.
+
+A Minecraft mod that turns gameplay into an immersive learning experience. The core is a data-driven engine where all content (quizzes, triggers, courses) lives in JSON files, safe from code refactors.
+
+## 🧬 The Evolution
+This project follows a "Break & Reintroduce" cycle. We track the history of our features—from Concept to Good to Perfected—in [docs/design_evolution.md](docs/design_evolution.md).
 
 ## Features
 

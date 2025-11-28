@@ -20,7 +20,8 @@ The **Adaptive Learning Engine** with Mod Menu integration is fully operational.
 1. **Compression Over Replacement**: Each developer refines and improves the existing code/docs. Never start from scratch - build on what works.
 2. **Data-Driven First**: The mod is an engine, not hardcoded content. All quizzes, triggers, and courses live in JSON.
 3. **Documentation is Code**: The `docs/` folder is the source of truth. Update it before coding, not after.
-4. **Self-Documenting**: Read `DEVELOPER_ONBOARDING.md` before starting. It contains the entire workflow and self-check protocol.
+4. **Design Evolution**: Read `docs/design_evolution.md`. We value **growth over stability**. It is okay to break a feature to reintroduce it in a better form, because the JSON data is safe.
+5. **Self-Documenting**: Read `DEVELOPER_ONBOARDING.md` before starting. It contains the entire workflow and self-check protocol.
 
 ### The Three Pillars
 1. **Relational Store** (`core/RelationalStore.java`) - In-memory database with integrity enforcement
