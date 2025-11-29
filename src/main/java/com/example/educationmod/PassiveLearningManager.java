@@ -139,7 +139,7 @@ public class PassiveLearningManager {
         factIndexByActivity.put(activity, (index + 1) % facts.size());
 
         // Send to chat with prefix
-        client.player.sendMessage(Text.literal("§7[Learning] §f" + fact), false);
+        com.example.educationmod.util.ChatUtils.sendMessage(client, fact);
 
         // Track for spaced repetition
         factLastShown.put(fact, System.currentTimeMillis());
