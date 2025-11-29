@@ -1,98 +1,53 @@
-# Implementation Plan - v014 (Integration & Fixes)
 
-## Goal
-Fix broken features and integrate the layered learning system with quizzes. Address: broken `/edu` chat command, trigger visibility, topic organization (tags/sections), and logging improvements.
+### Phase 1: GUI UX Improvements (Explicit Edit/Delete)
+#### [MODIFY] [TriggerDashboardScreen.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/TriggerDashboardScreen.java)
+- **Problem**: Right-click/Shift-Right-click is hidden/unknown to user.
+- **Solution**: Render small `[E]` (Edit) and `[X]` (Delete) buttons next to each saved event in the sidebar.
+- **Layout**: `[Icon] [Trigger Name]   [E] [X]`
+### Phase 1: GUI UX Improvements (Explicit Edit/Delete)
+#### [MODIFY] [TriggerDashboardScreen.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/TriggerDashboardScreen.java)
+- **Problem**: Right-click/Shift-Right-click is hidden/unknown to user.
+- **Solution**: Render small `[E]` (Edit) and `[X]` (Delete) buttons next to each saved event in the sidebar.
+- **Layout**: `[Icon] [Trigger Name]   [E] [X]`
 
-## User Review Required
+### Phase 3: Context-Aware Quiz Delivery
+#### [MODIFY] [QuizManager.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/QuizManager.java)
+- **Fix**: Ensure `startQuiz` checks if the quiz topic is relevant to the trigger.
+- **Logic**: Add tags to Quizzes (e.g., "mining", "combat"). Match with Trigger tags.
 
-> [!IMPORTANT]
-> **Broken Features to Fix:**
-> 1. Chat quiz replies (`/edu` command) not working
-> 2. Triggers not visible/working properly
-> 3. Topic data too small - need tags/sections
-> 4. Logs not accurate without layer representation
+## Phase 7: Library Sync (Git Integration)
+- [x] **Structure**: Create `src/main/resources/library` folders.
+- [ ] **Backend**: Update `importLibrary()` to accept flags (events, topics, courses).
+- [ ] **UI**:
+    - [x] Create `SyncScreen` with checkboxes for each category.
+    - [x] Update "Sync" button on Dashboard to open `SyncScreen`.
 
-## Proposed Changes
+## Phase 8: Skyblock Content & UI Fixes
+- [x] **UI Fix**:
+    - [x] Update `TriggerDashboardScreen` to render the name of the selected Trigger/Condition/Action inside or below its slot.
+    - [x] Ensure the text updates immediately upon selection.
+- [x] **Content Expansion**:
+    - [x] **Triggers**: `SB_KILL_MOB` (Diamond Sword), `SB_GAIN_XP` (Exp Bottle), `SB_REGION_ENTER` (Compass).
+    - [x] **Conditions**: `SB_LEVEL_REQ` (Book), `SB_ITEM_REQ` (Chest), `SB_PET_REQ` (Bone).
+    - [x] **Actions**: `SB_GIVE_ITEM` (Emerald), `SB_PLAY_SOUND` (Note Block).
 
-### 1. Fix Chat Quiz System
+## Phase 9: Chat Integration & Polish (Quick Win)
+- [x] **Chat Formatting**: Create `ChatUtils` for consistent, pretty mod messages.
+- [x] **Action Execution**: Ensure `SEND_MESSAGE` uses the new formatting.
+- [x] **Hypixel Prep**: Add a debug command to simulate server events.
 
-#### [MODIFY] [ChatQuizHandler.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/ChatQuizHandler.java)
-- **Debug**: Check if command is registering
-- **Fix**: Ensure `/edu` command processes answers correctly
-- **Test**: Verify feedback appears in chat
+## Next Steps (Planned)
+- [ ] **Hypixel Integration Testing**
+- [ ] **Chat UI Improvements**
+- [ ] **Advanced Data Refinement UI**
 
-#### [MODIFY] [IdleDetector.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/IdleDetector.java)
-- **Fix**: Ensure quiz questions appear in chat when idle
-- **Verify**: Question format is correct
-
----
-
-### 2. Improve Trigger Visibility
-
-#### [MODIFY] [TriggerEditorScreen.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/TriggerEditorScreen.java)
-- **Add**: Status indicators (✓ Active, ○ Inactive)
-- **Add**: Last triggered timestamp
-- **Add**: Trigger count (how many times fired)
-- **Polish**: Better formatting, color coding
-
-#### [MODIFY] [TriggerRegistry.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/TriggerRegistry.java)
-- **Add**: Logging when triggers fire
-- **Add**: Statistics tracking (trigger counts)
-
----
-
-### 3. Topic Organization (Tags & Sections)
-
-#### [NEW] [TopicMetadata.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/TopicMetadata.java)
-- **Tags**: Categorize topics (e.g., "science", "art", "math")
-- **Sections**: Organize questions into sections
-- **Difficulty**: Track difficulty levels
-- **Example**:
-  ```json
-  {
-    "topic": "color_theory",
-    "tags": ["art", "science", "visual"],
-    "sections": [
-      {
-        "name": "Primary Colors",
-        "questions": [...]
-      },
-      {
-        "name": "Color Mixing",
-        "questions": [...]
-      }
-    ]
-  }
-  ```
-
-#### [MODIFY] [ModConfigManager.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/ModConfigManager.java)
-- **Add**: Load topic metadata
-- **Add**: Section-based question selection
-
----
-
-### 4. Integrate Layered Learning with Quizzes
-
-#### [MODIFY] [QuizScreen.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/QuizScreen.java)
-- **On Correct Answer**: Stack the related concept layer
-- **On Wrong Answer**: Show missing prerequisite layers
-- **Add**: "Show Foundation" button → displays prerequisite concepts
-
-#### [MODIFY] [PlayerStats.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/PlayerStats.java)
-- **Integrate**: Connect quiz results to LayerManager
-- **Track**: Which layers were stacked from quiz results
-- **Track**: Guess rate vs informed choice rate
-
----
-
-### 5. Enhanced Logging
-
-#### [MODIFY] [DashboardScreen.java](file:///C:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/DashboardScreen.java)
-- Build with `.\gradlew build`
-
-### Manual Verification
-1. **Chat Quiz**: Type `/edu A` after idle quiz appears, verify feedback
-2. **Triggers**: Open TriggerEditorScreen, verify status indicators
-3. **Topics**: Check DashboardScreen shows tags/sections
-4. **Layers**: Answer quiz correctly, verify layer stacks
-5. **Logging**: Export data, verify layer information included
+## Verification Plan
+### Manual Testing
+1. **GUI**: Open Dashboard. Verify `[E]` and `[X]` buttons appear. Click them to confirm they work.
+2. **Immersive**:
+    - Enable Immersive Mode.
+    - Break a Diamond Block.
+    - Verify a proposal appears (Chat or Toast).
+    - Accept it.
+    - Verify it appears in the Dashboard.
+3. **HUD**: Verify HUD remains visible (or correctly toggled) during gameplay.

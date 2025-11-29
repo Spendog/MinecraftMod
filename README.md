@@ -7,6 +7,27 @@ A Minecraft mod that turns gameplay into an immersive learning experience. The c
 ## 🚀 Quick Start (For Developers)
 **Start Here**: [docs/project_evolution.md](docs/project_evolution.md) - Captures our "conscious" workflow and design philosophy.
 
+### 🛡️ The "Growth Cycle" & Checks and Balances
+To ensure safe growth, we use a strict documentation protocol. **Do not modify code without updating the corresponding document first.**
+
+1.  **Phase 1: Alignment** -> [docs/project_evolution.md](docs/project_evolution.md)
+    *   *Purpose*: The "Spirit" of the project. Read this to understand the *why* and the *workflow*.
+    *   *Check*: Does your idea align with the "Conscious Workflow"?
+
+2.  **Phase 2: Design** -> [docs/implementation_plan.md](docs/implementation_plan.md)
+    *   *Purpose*: The "Blueprint". Propose your technical changes here.
+    *   *Check*: Have you identified breaking changes?
+
+3.  **Phase 3: Execution** -> [docs/task.md](docs/task.md)
+    *   *Purpose*: The "Checklist". Track your progress item by item.
+    *   *Check*: Are you focused on one small task at a time?
+
+4.  **Phase 4: Verification** -> [docs/walkthrough.md](docs/walkthrough.md)
+    *   *Purpose*: The "Proof". Document what you built and how to test it.
+    *   *Check*: Did you verify the fix *before* moving on?
+
+**Protection Rule**: Never overwrite a document without summarizing its key insights into the next version or the Evolution doc. This ensures we never lose the "history of ideas."
+
 ### The "Conscious" Workflow
 1.  **Quick Wins**: Break tasks into 10-minute chunks.
 2.  **Fix Before Test**: Ensure tools work in isolation before integration testing.

@@ -1,42 +1,48 @@
-# Development Tasks
+- [ ] **Build** <!-- id: 219 -->
+    - [ ] Run `./gradlew build` <!-- id: 220 -->
+- [x] Create `CourseManager` to handle Course -> Chapter -> Page structure.
+- [x] Implement `OPEN_COURSE` action in `ActionManager`.
+- [x] Create `CourseScreen` GUI to display course content.
+- [ ] Verify Immersive Mode proposes courses based on context.
 
-## Completed Versions (v002-v021)
-- [x] v002-v014: Core engine, layered learning, immersive mode
-- [x] v015-v017: Content expansion, visualizations, optimizations
-- [x] v018: Engine rewrite (Strict Relational Architecture)
-- [x] v019-v020: Documentation and polish
-- [x] v021: Recovery & stability (Console overlay, advanced querying)
+## Phase 5: Final Polish & Versioning
+- [x] **Versioning**: Fix double version string in JAR name.
+- [x] **Safe Mode UI**:
+    - [x] Dashboard: Make Safe Mode indicator read-only.
+    - [x] Settings: Add confirmation dialog when disabling Safe Mode.
+- [x] **Dashboard UX**:
+    - [x] Implement strict filtering based on selected slot (Trigger/Condition/Action).
+    - [x] Auto-switch to Condition slot after selecting a Trigger.
+- [x] **Crash Fix**:
+    - [x] Move client-side initialization to `EducationModClient`.
+    - [x] Clean up redundant registry initialization.
 
----
+## Phase 6: Final UI Polish (Renaming & Text)
+- [x] **Grid UI**: Improve visibility of item names (prevent aggressive truncation).
+- [x] **Event Renaming**:
+    - [x] Add `name` field to `EventDefinition` in `ModConfigManager`.
+    - [x] Add "Event Name" input field to `TriggerDashboardScreen`.
+    - [x] Update `saveEvent` to store the name.
+    - [x] Update sidebar rendering to show the name.
 
-## v022: Standardization & Mod Menu Integration
-- [x] Feature: Mod Menu Integration (ModMenuApi)
-- [ ] Refactor: Data-Driven Settings Screen
-- [ ] Security: Audit Console Logs for PII
+## Phase 7: Library Sync (Git Integration)
+- [x] **Structure**: Create `src/main/resources/library` folders (events, topics, courses).
+- [x] **Backend**: Update `importLibrary()` to accept flags.
+- [x] **UI**: Create `SyncScreen` with checkboxes and link to Dashboard.
 
-## v023: Adaptive Learning Engine
-- [x] Feature: Text Input for Quizzes (ChatQuizHandler)
-- [x] Feature: Knowledge Gap Tracker (Log incorrect answers)
-- [x] Feature: Dynamic Study Set Generator (JSON output)
-- [x] Feature: Console 'study' command (Inspect gaps)
+## Phase 8: Skyblock Content & UI Fixes
+- [x] **UI**: Fix selected item text not updating/visible in Dashboard slots.
+- [x] **Triggers**: Add Skyblock-specific triggers (Kill Mob, Gain XP, Region).
+- [x] **Conditions**: Add Skyblock-specific conditions (Level, Item, Pet).
+- [x] **Actions**: Add Skyblock-specific actions (Give Item, Sound).
 
-## v024: Final Polish & Documentation
-- [x] Fix: Restore Learning HUD (Safety check for coords)
-- [x] Docs: Create README.md
-- [x] Docs: Finalize Handoff
+## Phase 9: Chat Integration & Polish (Quick Win)
+- [x] **Chat Formatting**: Create `ChatUtils` for consistent, pretty mod messages.
+- [x] **Action Execution**: Ensure `SEND_MESSAGE` uses the new formatting.
+- [x] **Hypixel Prep**: Add a debug command to simulate server events.
 
-## v025: Deployment & Workflow System
-- [x] Create .gitignore (exclude old JARs)
-- [x] Create sample topic content (bundle with mod)
-- [x] Create DEVELOPER_ONBOARDING.md
-- [x] Create pre-push-check.bat script
-- [x] Create upgrade-mod.bat for users
-
----
-
-## Next Session (v026+)
-**Focus Areas:**
-- [ ] Security: Complete PII audit of console logs
-- [ ] Refactor: Data-driven settings pattern
-- [ ] Content: Expand bundled topics beyond welcome_basics
-- [ ] Feature: Visual layer graph in dashboard
+## Future Goals (Post-v027)
+- [ ] **Testing**: Begin testing on Hypixel server.
+- [ ] **Data Refinement**: Make in-mod data editing more intuitive.
+- [ ] **Content Area**: Refine the dashboard content area to show more relevant info.
+- [ ] **Sync**: Explore auto-sync or better Git integration for builds.
