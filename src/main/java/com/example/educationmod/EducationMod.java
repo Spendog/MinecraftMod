@@ -10,11 +10,19 @@ public class EducationMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing Education Mod Trigger-Event Engine");
+		LOGGER.info("Initializing Education Mod");
 
 		// Initialize Managers
 		ModConfigManager.init();
-		ModSettings.load(); // Load settings
-		TriggerRegistry.init();
+		ModSettings.load();
+
+		// Initialize Registries
+		com.example.educationmod.registries.TriggerRegistry.init();
+		com.example.educationmod.registries.ActionRegistry.init();
+		com.example.educationmod.registries.ConditionRegistry.init();
+
+		// Initialize Course Manager
+		com.example.educationmod.course.CourseManager.init();
+
 	}
 }

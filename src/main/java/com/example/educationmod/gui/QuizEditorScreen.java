@@ -147,8 +147,10 @@ public class QuizEditorScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient Background (Dark Blue to Purple)
-        context.fillGradient(0, 0, this.width, this.height, 0xFF100010, 0xFF300030);
+        // Solid Background to prevent "blur" issues
+        // this.renderBackground(context, mouseX, mouseY, delta); // Removed to prevent
+        // blur
+        context.fill(0, 0, this.width, this.height, 0xFF100010); // Solid dark purple/black
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
 

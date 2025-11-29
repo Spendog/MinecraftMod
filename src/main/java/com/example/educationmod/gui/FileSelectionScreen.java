@@ -9,14 +9,21 @@ import net.minecraft.text.Text;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class FileSelectionScreen extends Screen {
     private final Screen parent;
     private final List<String> fileList = new ArrayList<>();
+    private final Consumer<String> onSelect;
 
     public FileSelectionScreen(Screen parent) {
+        this(parent, null);
+    }
+
+    public FileSelectionScreen(Screen parent, Consumer<String> onSelect) {
         super(Text.literal("File Editor"));
         this.parent = parent;
+        this.onSelect = onSelect;
     }
 
     @Override
@@ -35,21 +42,28 @@ public class FileSelectionScreen extends Screen {
         int y = 40;
         for (String file : fileList) {
             final String fileName = file;
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("Edit: " + file), button -> {
-                String fName = fileName.substring(fileName.indexOf(": ") + 2);
-                File targetFile = fileName.startsWith("Topics") ? ModConfigManager.TOPICS_DIR.resolve(fName).toFile()
-                        : ModConfigManager.EVENTS_DIR.resolve(fName).toFile();
+            this.addDrawableChild(
+                    ButtonWidget.builder(Text.literal((onSelect != null ? "Select: " : "Edit: ") + file), button -> {
+                        String fName = fileName.substring(fileName.indexOf(": ") + 2);
+                        File targetFile = fileName.startsWith("Topics")
+                                ? ModConfigManager.TOPICS_DIR.resolve(fName).toFile()
+                                : ModConfigManager.EVENTS_DIR.resolve(fName).toFile();
 
-                if (Screen.hasShiftDown()) {
-                    net.minecraft.util.Util.getOperatingSystem().open(targetFile);
-                } else {
-                    if (fileName.startsWith("Topics")) {
-                        this.client.setScreen(new QuizEditorScreen(targetFile));
-                    } else {
-                        net.minecraft.util.Util.getOperatingSystem().open(targetFile);
-                    }
-                }
-            }).dimensions(center - 150, y, 300, 20).build());
+                        if (onSelect != null) {
+                            onSelect.accept(fName);
+                            this.client.setScreen(parent);
+                        } else {
+                            if (Screen.hasShiftDown()) {
+                                net.minecraft.util.Util.getOperatingSystem().open(targetFile);
+                            } else {
+                                if (fileName.startsWith("Topics")) {
+                                    this.client.setScreen(new QuizEditorScreen(targetFile));
+                                } else {
+                                    net.minecraft.util.Util.getOperatingSystem().open(targetFile);
+                                }
+                            }
+                        }
+                    }).dimensions(center - 150, y, 300, 20).build());
             y += 25;
         }
     }
@@ -67,7 +81,10 @@ public class FileSelectionScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fillGradient(0, 0, this.width, this.height, 0xFF100010, 0xFF300030);
+        // Solid Background to prevent "blur" issues
+        // this.renderBackground(context, mouseX, mouseY, delta); // Removed to prevent
+        // blur
+        context.fill(0, 0, this.width, this.height, 0xFF100010); // Solid dark purple/black
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
         super.render(context, mouseX, mouseY, delta);
     }

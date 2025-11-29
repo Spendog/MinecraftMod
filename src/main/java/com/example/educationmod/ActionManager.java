@@ -8,11 +8,31 @@ public class ActionManager {
 
     public static void executeAction(String actionType, String data) {
         switch (actionType) {
+            case "OPEN_COURSE":
+                // Open Course Screen
+                net.minecraft.client.MinecraftClient.getInstance().execute(() -> {
+                    String courseId = data.replace(".json", "");
+                    net.minecraft.client.MinecraftClient.getInstance()
+                            .setScreen(new com.example.educationmod.gui.CourseScreen(null, courseId));
+                });
+                break;
+            case "ADD_CHAPTER":
+                // Unlock chapter logic (Placeholder)
+                com.example.educationmod.ActivityLogger.log("Unlocked chapter: " + data);
+                break;
             case "QUIZ":
                 openQuiz(data);
                 break;
             case "COMMAND":
-                executeCommand(data);
+                if (ModSettings.isSafeMode()) {
+                    EducationMod.LOGGER.info("Command blocked by Safe Mode: " + data);
+                    if (MinecraftClient.getInstance().player != null) {
+                        MinecraftClient.getInstance().player.sendMessage(Text.literal("§cAction blocked by Safe Mode"),
+                                true);
+                    }
+                } else {
+                    executeCommand(data);
+                }
                 break;
             case "LOCK":
                 // TODO: Implement input locking

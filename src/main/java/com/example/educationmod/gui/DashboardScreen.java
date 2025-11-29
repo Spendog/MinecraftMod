@@ -37,6 +37,11 @@ public class DashboardScreen extends Screen {
 
             for (Map.Entry<String, Double> entry : stats.topicConfidence.entrySet()) {
                 String topic = entry.getKey();
+                // Strip path if present
+                if (topic.contains("/") || topic.contains("\\")) {
+                    topic = topic.substring(Math.max(topic.lastIndexOf('/'), topic.lastIndexOf('\\')) + 1);
+                }
+
                 double confidence = entry.getValue();
                 int layerHeight = (int) (confidence * 10);
                 sb.append(topic).append(": ").append(layerHeight).append(" layers\n");
@@ -52,97 +57,79 @@ public class DashboardScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient Background
-        context.fillGradient(0, 0, this.width, this.height, 0xFF001020, 0xFF002040);
+        // Solid Background to prevent "blur" issues
+        // this.renderBackground(context, mouseX, mouseY, delta); // Removed to prevent
+        // blur
+        context.fill(0, 0, this.width, this.height, 0xFF101010); // Solid dark gray/black
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
 
         PlayerStats stats = PlayerStats.getInstance();
+        int leftColumnX = 40;
+        int rightColumnX = this.width / 2 + 20;
         int y = 60;
 
-        // Layer Stack Visualization
-        context.drawText(this.textRenderer, "§6Learning Progress (Layer Stacks):", 20, y, 0xFFFFFF, true);
+        // --- Left Column: Topic Mastery ---
+        context.drawText(this.textRenderer, "§6Topic Mastery:", leftColumnX, y, 0xFFFFFF, true);
         y += 20;
 
-        // Show layer stacks for each topic
         for (Map.Entry<String, Double> entry : stats.topicConfidence.entrySet()) {
             String topic = entry.getKey();
-            double confidence = entry.getValue();
-            int layerHeight = (int) (confidence * 10);
+            // Strip path if present
+            if (topic.contains("/") || topic.contains("\\")) {
+                topic = topic.substring(Math.max(topic.lastIndexOf('/'), topic.lastIndexOf('\\')) + 1);
+            }
 
-            // Visual stack representation
-            String layers = "█".repeat(Math.max(1, layerHeight));
-            String layerText = "§f" + topic + ": §e" + layers + " §7(" + layerHeight + " layers)";
-            context.drawText(this.textRenderer, layerText, 30, y, 0xFFFFFF, true);
-            y += 15;
+            double confidence = entry.getValue();
+
+            // Draw Topic Name
+            context.drawText(this.textRenderer, topic, leftColumnX, y, 0xFFFFFF, true);
+
+            // Draw Progress Bar Background
+            int barX = leftColumnX + 100;
+            int barWidth = 100;
+            int barHeight = 8;
+            context.fill(barX, y, barX + barWidth, y + barHeight, 0xFF333333);
+
+            // Draw Progress Bar Fill
+            int fillWidth = (int) (barWidth * confidence);
+            int color = confidence > 0.8 ? 0xFF55FF55 : (confidence > 0.5 ? 0xFFFFFF55 : 0xFFFF5555);
+            context.fill(barX, y, barX + fillWidth, y + barHeight, color);
+
+            // Draw Percentage
+            String percent = (int) (confidence * 100) + "%";
+            context.drawText(this.textRenderer, percent, barX + barWidth + 5, y, 0xAAAAAA, true);
+
+            y += 20;
         }
 
-        // Process Improvement Section
-        y += 10;
-        context.drawText(this.textRenderer, "§6Process Improvement:", 20, y, 0xFFFFFF, true);
+        // --- Right Column: Insights ---
+        y = 60;
+        context.drawText(this.textRenderer, "§6Insights:", rightColumnX, y, 0xFFFFFF, true);
         y += 20;
 
-        // Placeholder for future tracking
-        String improvement = "§7Learning Method: §aBuilding Foundations";
-        context.drawText(this.textRenderer, improvement, 30, y, 0xFFFFFF, true);
-        y += 15;
+        // Weakest Topic
+        String weakest = stats.getWeakestTopic();
+        context.drawText(this.textRenderer, "§7Focus Area:", rightColumnX, y, 0xAAAAAA, true);
+        context.drawText(this.textRenderer, weakest != null ? "§c" + weakest : "§aNone!", rightColumnX, y + 10,
+                0xFFFFFF, true);
+        y += 30;
 
-        String guessRate = "§7Informed Choices: §aImproving";
-        context.drawText(this.textRenderer, guessRate, 30, y, 0xFFFFFF, true);
+        // Total Quizzes
+        int totalQuizzes = stats.quizzesTaken.values().stream().mapToInt(Integer::intValue).sum();
+        context.drawText(this.textRenderer, "§7Total Quizzes:", rightColumnX, y, 0xAAAAAA, true);
+        context.drawText(this.textRenderer, "§b" + totalQuizzes, rightColumnX, y + 10, 0xFFFFFF, true);
+        y += 30;
 
-        // Render Layer Graph
-        renderLayerGraph(context, this.width / 2 + 20, 60);
+        // Highest Streak
+        int maxStreak = 0;
+        for (int streak : stats.topicStreaks.values()) {
+            if (streak > maxStreak)
+                maxStreak = streak;
+        }
+        context.drawText(this.textRenderer, "§7Best Streak:", rightColumnX, y, 0xAAAAAA, true);
+        context.drawText(this.textRenderer, "§e⚡ " + maxStreak, rightColumnX, y + 10, 0xFFFFFF, true);
 
         super.render(context, mouseX, mouseY, delta);
-    }
-
-    private void renderLayerGraph(DrawContext context, int x, int y) {
-        context.drawText(this.textRenderer, "§6Knowledge Graph:", x, y, 0xFFFFFF, true);
-        y += 20;
-
-        com.example.educationmod.layers.LayerManager layerManager = com.example.educationmod.layers.LayerManager
-                .getInstance();
-        Map<String, java.util.List<com.example.educationmod.layers.ConceptLayer>> topicLayers = layerManager
-                .getTopicLayers();
-
-        int topicIndex = 0;
-        int startX = x + 20;
-        int startY = y + 100; // Start from bottom
-
-        for (Map.Entry<String, java.util.List<com.example.educationmod.layers.ConceptLayer>> entry : topicLayers
-                .entrySet()) {
-            String topic = entry.getKey();
-            java.util.List<com.example.educationmod.layers.ConceptLayer> layers = entry.getValue();
-
-            int currentX = startX + (topicIndex * 80);
-            int currentY = startY;
-
-            // Draw topic label
-            context.drawText(this.textRenderer, topic, currentX, currentY + 25, 0xAAAAAA, true);
-
-            for (com.example.educationmod.layers.ConceptLayer layer : layers) {
-                boolean isLearned = layerManager.getStackHeight(layer.getId()) > 0;
-                int color = isLearned ? 0xFF55FF55 : 0xFF555555; // Green if learned, Gray if not
-                String label = layer.getId().replace(topic + "_", ""); // Shorten label
-
-                // Draw connection to previous (simplified vertical stack)
-                if (layers.indexOf(layer) > 0) {
-                    context.fill(currentX + 30, currentY + 20, currentX + 30, currentY + 30, 0xFF888888);
-                }
-
-                drawNode(context, currentX, currentY, label, color);
-                currentY -= 30; // Move up
-            }
-            topicIndex++;
-        }
-    }
-
-    private void drawNode(DrawContext context, int x, int y, String label, int color) {
-        context.fill(x, y, x + 60, y + 20, 0xFF202020); // Background
-        context.drawBorder(x, y, 60, 20, color); // Border
-        // Truncate label if too long
-        if (label.length() > 8)
-            label = label.substring(0, 8) + "..";
-        context.drawText(this.textRenderer, label, x + 5, y + 6, 0xFFFFFF, false);
     }
 }

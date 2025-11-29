@@ -71,7 +71,6 @@ public class EducationModClient implements ClientModInitializer {
         IdleDetector.init();
         ChatQuizHandler.init();
         LearningHUD.init();
-        TriggerRegistry.init();
 
         EducationMod.LOGGER.info("EducationModClient Initialized with v012 Immersive Learning.");
     }

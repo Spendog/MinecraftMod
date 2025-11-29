@@ -59,7 +59,7 @@ public class ModSettings {
     public static class SettingsData {
         public boolean consoleEnabled = false; // Default off
         public boolean showDebugDocs = false;
-        public boolean safeMode = false;
+        public boolean safeMode = true; // Default ON for safety
         public boolean immersiveMode = false;
         public float hudOpacity = 0.7f;
         public boolean idleQuizEnabled = true;

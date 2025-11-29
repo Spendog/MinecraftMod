@@ -14,6 +14,10 @@ public class ModMenuScreen extends Screen {
 
     @Override
     protected void init() {
+        // Redirect to EDU MC Dashboard
+        this.client.setScreen(new TriggerDashboardScreen(this));
+
+        // Old code below is unreachable but kept for reference if needed
         int center = this.width / 2;
         int y = 50;
 
@@ -30,11 +34,13 @@ public class ModMenuScreen extends Screen {
 
         // Tools
         this.addDrawableChild(ButtonWidget.builder(Text.literal("Triggers"), button -> {
+            com.example.educationmod.ActivityLogger.log("Opening Trigger Editor");
             this.client.setScreen(new TriggerEditorScreen(this));
         }).dimensions(center - 105, y, 100, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Settings"), button -> {
-            this.client.setScreen(new SettingsScreen(this));
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("RED MODE"), button -> {
+            com.example.educationmod.ActivityLogger.log("Opening Red Mode Dashboard");
+            this.client.setScreen(new TriggerDashboardScreen(this));
         }).dimensions(center + 5, y, 100, 20).build());
 
         y += 35;
@@ -53,6 +59,13 @@ public class ModMenuScreen extends Screen {
             this.client.setScreen(new FileSelectionScreen(this));
         }).dimensions(center - 100, y, 200, 20).build());
 
+        y += 25;
+
+        // View Logs
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("View Activity Logs"), button -> {
+            this.client.setScreen(new BookScreen(this, com.example.educationmod.ActivityLogger.getLogFilePath()));
+        }).dimensions(center - 100, y, 200, 20).build());
+
         // Close Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("X"), button -> {
             this.close();
@@ -61,8 +74,10 @@ public class ModMenuScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient Background
-        context.fillGradient(0, 0, this.width, this.height, 0xFF001020, 0xFF002040);
+        // Solid Background to prevent "blur" issues
+        // this.renderBackground(context, mouseX, mouseY, delta); // Removed to prevent
+        // blur
+        context.fill(0, 0, this.width, this.height, 0xFF001020); // Solid dark blue/black
 
         // Title
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);

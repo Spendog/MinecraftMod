@@ -140,6 +140,7 @@ public class ModConfigManager {
     // Simple storage for events: TriggerType -> List of EventData
     // For prototype, we just store raw JSON objects or a simple class
     public static class EventDefinition {
+        public String name;
         public String trigger;
         public String condition;
         public ActionDefinition action;
@@ -190,10 +191,58 @@ public class ModConfigManager {
     }
 
     public static List<EventDefinition> getEvents() {
-        // Deprecated: Should use RelationalStore directly, but keeping for
-        // compatibility if needed
-        // For now, return empty list or throw error to force migration
-        return new ArrayList<>();
+        return com.example.educationmod.core.RelationalStore.getInstance().getAllEvents();
+    }
+
+    public static void saveEvent(EventDefinition event) {
+        try {
+            // Add to in-memory store
+            com.example.educationmod.core.RelationalStore.getInstance().addEvent(event);
+
+            // Generate unique filename
+            String fileName = event.trigger.toLowerCase() + "_" + System.currentTimeMillis() + ".json";
+            File eventFile = EVENTS_DIR.resolve(fileName).toFile();
+
+            // Debug: Log save attempt
+            EducationMod.LOGGER.info("Saving event to: " + eventFile.getAbsolutePath());
+            ActivityLogger.log("Saving event: " + event.trigger + " -> " + event.action.type);
+
+            // Write JSON
+            try (FileWriter writer = new FileWriter(eventFile)) {
+                GSON.toJson(event, writer);
+                EducationMod.LOGGER.info("Event saved successfully: " + fileName);
+            }
+        } catch (IOException e) {
+            EducationMod.LOGGER.error("Failed to save event", e);
+            ActivityLogger.log("ERROR: Failed to save event - " + e.getMessage());
+        }
+    }
+
+    public static void deleteEvent(int index) {
+        try {
+            List<EventDefinition> events = getEvents();
+            if (index >= 0 && index < events.size()) {
+                EventDefinition event = events.get(index);
+
+                // Find and delete the corresponding file
+                File[] eventFiles = EVENTS_DIR.toFile().listFiles((dir, name) -> name.endsWith(".json"));
+                if (eventFiles != null && eventFiles.length > index) {
+                    File fileToDelete = eventFiles[index];
+                    if (fileToDelete.delete()) {
+                        EducationMod.LOGGER.info("Deleted event file: " + fileToDelete.getName());
+                        ActivityLogger.log("Deleted event: " + event.trigger);
+
+                        // Remove from in-memory store and reload
+                        loadEvents();
+                    } else {
+                        EducationMod.LOGGER.error("Failed to delete event file: " + fileToDelete.getName());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            EducationMod.LOGGER.error("Failed to delete event", e);
+            ActivityLogger.log("ERROR: Failed to delete event - " + e.getMessage());
+        }
     }
 
     public static TopicDefinition loadTopic(String filename) {
@@ -254,5 +303,48 @@ public class ModConfigManager {
 
     public static List<CourseDefinition> getCourses() {
         return loadedCourses;
+    }
+
+    public static void importLibrary(boolean importEvents, boolean importTopics, boolean importCourses) {
+        EducationMod.LOGGER.info("Starting Library Sync...");
+
+        if (importEvents)
+            importFolder("events", EVENTS_DIR);
+        if (importTopics)
+            importFolder("topics", TOPICS_DIR);
+        if (importCourses)
+            importFolder("courses", COURSES_DIR);
+
+        // Reload everything
+        loadEvents();
+        loadCourses();
+        EducationMod.LOGGER.info("Library Sync Complete.");
+    }
+
+    private static void importFolder(String subFolder, Path targetDir) {
+        FabricLoader.getInstance().getModContainer(EducationMod.MOD_ID).ifPresent(container -> {
+            container.findPath("library/" + subFolder).ifPresent(sourceDir -> {
+                try {
+                    Files.walk(sourceDir).forEach(sourcePath -> {
+                        if (Files.isRegularFile(sourcePath)) {
+                            String fileName = sourcePath.getFileName().toString();
+                            if (fileName.endsWith(".json")) {
+                                Path targetPath = targetDir.resolve(fileName);
+                                try {
+                                    // Copy and overwrite
+                                    Files.copy(sourcePath, targetPath,
+                                            java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                                    EducationMod.LOGGER.info("Imported: " + fileName);
+                                } catch (IOException e) {
+                                    EducationMod.LOGGER.error("Failed to copy " + fileName, e);
+                                }
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    EducationMod.LOGGER.error("Failed to list files in library/" + subFolder, e);
+                }
+            });
+        });
     }
 }

@@ -16,6 +16,10 @@ public class TriggerEditorScreen extends Screen {
         super(Text.literal("Trigger Editor"));
         this.parent = parent;
         this.events = ModConfigManager.getEvents();
+        if (this.events == null) {
+            this.events = new java.util.ArrayList<>();
+            com.example.educationmod.ActivityLogger.logError("Failed to load events: List was null", null);
+        }
     }
 
     @Override
@@ -33,27 +37,22 @@ public class TriggerEditorScreen extends Screen {
 
         // Add Trigger Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("+ Add Trigger"), button -> {
-            this.client.setScreen(new ItemSelectionScreen(this, selectedId -> {
-                // For now, just log it or add a dummy event
-                // In a real app, we'd open a full configuration screen for the trigger
-                // Here we just add a dummy BLOCK_BREAK trigger for the selected item
-                ModConfigManager.EventDefinition newEvent = new ModConfigManager.EventDefinition();
-                newEvent.trigger = "BLOCK_BREAK";
-                newEvent.condition = selectedId;
-                newEvent.action = new ModConfigManager.ActionDefinition();
-                newEvent.action.type = "QUIZ";
-                newEvent.action.data = "example_quiz.json";
-
-                ModConfigManager.getEvents().add(newEvent);
-                this.client.setScreen(this); // Return to this screen
-            }));
+            ModConfigManager.EventDefinition newEvent = new ModConfigManager.EventDefinition();
+            newEvent.trigger = "BLOCK_BREAK";
+            newEvent.action = new ModConfigManager.ActionDefinition();
+            newEvent.action.type = "QUIZ";
+            this.client.setScreen(new TriggerConfigScreen(this, newEvent));
         }).dimensions(center - 100, 30, 200, 20).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient Background
-        context.fillGradient(0, 0, this.width, this.height, 0xFF100010, 0xFF300030);
+        // Use Z-translation to ensure background draws over everything (fixing "blur"
+        // artifacts)
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 500); // Move forward in Z
+        context.fill(0, 0, this.width, this.height, 0xFF100010); // Solid dark purple/black
+        context.getMatrices().pop();
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
 
@@ -75,8 +74,12 @@ public class TriggerEditorScreen extends Screen {
                 context.drawText(this.textRenderer, triggerText, textCenterX - 150, textY, 0xFFAAAA, false);
                 context.drawText(this.textRenderer, conditionText, textCenterX + 10, textY, 0xAAAAAA, false);
 
-                // Edit Button (Placeholder)
+                // Edit Button (Clickable area check)
+                // We can't easily add buttons in a loop in render(), so we'll check clicks in
+                // mouseClicked
+                // For now, just draw the text
                 context.drawText(this.textRenderer, "[Edit]", textCenterX + 120, textY, 0xFFFF55, false);
+                context.drawText(this.textRenderer, "[Delete]", textCenterX + 160, textY, 0xFF5555, false);
 
                 y += 15;
                 textY = (int) y;
@@ -86,5 +89,39 @@ public class TriggerEditorScreen extends Screen {
         }
 
         super.render(context, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (super.mouseClicked(mouseX, mouseY, button))
+            return true;
+
+        int y = 60;
+        int center = this.width / 2;
+
+        // Simple hit detection for the list
+        for (int i = 0; i < events.size(); i++) {
+            ModConfigManager.EventDefinition event = events.get(i);
+            int textY = y;
+            int textCenterX = center;
+
+            // Edit Button: x ~ center + 120, width ~ 30
+            if (mouseY >= textY && mouseY <= textY + 10) {
+                if (mouseX >= textCenterX + 120 && mouseX <= textCenterX + 150) {
+                    this.client.setScreen(new TriggerConfigScreen(this, event));
+                    return true;
+                }
+                // Delete Button: x ~ center + 160, width ~ 40
+                if (mouseX >= textCenterX + 160 && mouseX <= textCenterX + 200) {
+                    ModConfigManager.deleteEvent(i);
+                    com.example.educationmod.ActivityLogger.log("Deleted trigger: " + event.trigger);
+                    // Refresh list
+                    this.events = ModConfigManager.getEvents();
+                    return true;
+                }
+            }
+            y += 40; // 15 + 25
+        }
+        return false;
     }
 }

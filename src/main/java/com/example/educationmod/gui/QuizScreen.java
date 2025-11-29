@@ -4,7 +4,7 @@ import com.example.educationmod.ModConfigManager;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import com.example.educationmod.PlayerStats;
-import com.example.educationmod.LearningLogger; // Added import
+import com.example.educationmod.LearningLogger;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
@@ -31,13 +31,18 @@ public class QuizScreen extends Screen {
 
     @Override
     protected void init() {
-        if (topic == null) {
+        if (topic == null && topicFile != null) {
             topic = ModConfigManager.loadTopic(topicFile);
         }
 
         if (topic == null || topic.questions == null || topic.questions.isEmpty()) {
             this.close(); // Nothing to show
             return;
+        }
+
+        if (currentQuestionIndex == 0) {
+            com.example.educationmod.ActivityLogger
+                    .logInteraction("Started quiz: " + (topic.id != null ? topic.id : "Unknown"));
         }
 
         setupQuestion();
@@ -60,6 +65,9 @@ public class QuizScreen extends Screen {
             } else if (topic != null && topic.id != null) {
                 PlayerStats.getInstance().recordResult(topic.id, score, topic.questions.size());
             }
+
+            com.example.educationmod.ActivityLogger.logInteraction("Finished quiz: "
+                    + (topic.id != null ? topic.id : "Unknown") + " Score: " + score + "/" + topic.questions.size());
 
             this.addDrawableChild(ButtonWidget
                     .builder(Text.literal("Finish (Score: " + score + "/" + topic.questions.size() + ")"),

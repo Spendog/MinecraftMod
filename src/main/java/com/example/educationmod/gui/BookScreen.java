@@ -6,13 +6,15 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
-import java.io.File; // Added import
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public class BookScreen extends Screen {
     private final Screen parent;
     private final ModConfigManager.CourseDefinition course;
     private final ModConfigManager.BookDefinition book;
+    private final Path logFile;
 
     // Constructor for Course List (Root)
     public BookScreen(Screen parent) {
@@ -20,6 +22,7 @@ public class BookScreen extends Screen {
         this.parent = parent;
         this.course = null;
         this.book = null;
+        this.logFile = null;
     }
 
     // Constructor for Book List (Inside a Course)
@@ -28,6 +31,7 @@ public class BookScreen extends Screen {
         this.parent = parent;
         this.course = course;
         this.book = null;
+        this.logFile = null;
     }
 
     // Constructor for Chapter List (Inside a Book)
@@ -36,6 +40,16 @@ public class BookScreen extends Screen {
         this.parent = parent;
         this.course = course;
         this.book = book;
+        this.logFile = null;
+    }
+
+    // Constructor for Log Viewer
+    public BookScreen(Screen parent, Path logFile) {
+        super(Text.literal("Activity Logs"));
+        this.parent = parent;
+        this.course = null;
+        this.book = null;
+        this.logFile = logFile;
     }
 
     @Override
@@ -48,7 +62,9 @@ public class BookScreen extends Screen {
             this.close();
         }).dimensions(this.width - 30, 10, 20, 20).build());
 
-        if (course == null) {
+        if (logFile != null) {
+            // Log Viewer Mode - No buttons needed for content, just back button
+        } else if (course == null) {
             // Show Courses
             List<ModConfigManager.CourseDefinition> courses = ModConfigManager.getCourses();
             if (courses.isEmpty()) {
@@ -105,10 +121,36 @@ public class BookScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Gradient Background (Dark Blue to Purple)
-        context.fillGradient(0, 0, this.width, this.height, 0xFF100010, 0xFF300030);
+        // Solid Background to prevent "blur" issues
+        context.fill(0, 0, this.width, this.height, 0xFF100010); // Solid dark purple/black
 
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
+
+        if (logFile != null) {
+            // Render Log Content
+            int y = 60;
+            int center = this.width / 2;
+            try {
+                if (java.nio.file.Files.exists(logFile)) {
+                    List<String> lines = java.nio.file.Files.readAllLines(logFile);
+                    // Show last 15 lines
+                    int start = Math.max(0, lines.size() - 15);
+                    for (int i = start; i < lines.size(); i++) {
+                        String line = lines.get(i);
+                        // Truncate if too long
+                        if (line.length() > 60)
+                            line = line.substring(0, 57) + "...";
+                        context.drawText(this.textRenderer, line, center - 150, y, 0xAAAAAA, false);
+                        y += 12;
+                    }
+                } else {
+                    context.drawCenteredTextWithShadow(this.textRenderer, "No logs found.", center, y, 0xAAAAAA);
+                }
+            } catch (Exception e) {
+                context.drawCenteredTextWithShadow(this.textRenderer, "Error reading logs.", center, y, 0xFF5555);
+            }
+        }
+
         super.render(context, mouseX, mouseY, delta);
     }
 }
