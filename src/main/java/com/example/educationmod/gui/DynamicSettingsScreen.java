@@ -31,6 +31,7 @@ public class DynamicSettingsScreen extends Screen {
         for (ConfigSchema<?> option : ConfigManager.getOptions()) {
             int finalY = y;
             if (option.type == ConfigSchema.ConfigType.BOOLEAN) {
+                @SuppressWarnings("unchecked")
                 ConfigSchema<Boolean> boolOption = (ConfigSchema<Boolean>) option;
                 this.addDrawableChild(ButtonWidget.builder(
                         Text.literal(option.label + ": " + (boolOption.getter.get() ? "ON" : "OFF")),
@@ -61,12 +62,18 @@ public class DynamicSettingsScreen extends Screen {
                     try {
                         if (option.type == ConfigSchema.ConfigType.INTEGER) {
                             int val = Integer.parseInt(text);
-                            ((ConfigSchema<Integer>) option).setter.accept(val);
+                            @SuppressWarnings("unchecked")
+                            ConfigSchema<Integer> intOption = (ConfigSchema<Integer>) option;
+                            intOption.setter.accept(val);
                         } else if (option.type == ConfigSchema.ConfigType.FLOAT) {
                             float val = Float.parseFloat(text);
-                            ((ConfigSchema<Float>) option).setter.accept(val);
+                            @SuppressWarnings("unchecked")
+                            ConfigSchema<Float> floatOption = (ConfigSchema<Float>) option;
+                            floatOption.setter.accept(val);
                         } else if (option.type == ConfigSchema.ConfigType.STRING) {
-                            ((ConfigSchema<String>) option).setter.accept(text);
+                            @SuppressWarnings("unchecked")
+                            ConfigSchema<String> stringOption = (ConfigSchema<String>) option;
+                            stringOption.setter.accept(text);
                         }
                     } catch (NumberFormatException e) {
                         // Ignore invalid input

@@ -32,6 +32,9 @@ dependencies {
 
     // Mod Menu
     modImplementation "com.terraformersmc:modmenu:14.0.0"
+
+    // REI
+    modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:18.0.808"
 }
 
 processResources {

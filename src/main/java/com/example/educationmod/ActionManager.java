@@ -82,6 +82,10 @@ public class ActionManager {
         });
     }
 
+    public static void execute(com.example.educationmod.registries.ActionRegistry.ActionType actionType, String data) {
+        executeAction(actionType.id, data);
+    }
+
     private static void executeCommand(String command) {
         if (MinecraftClient.getInstance().player != null) {
             MinecraftClient.getInstance().player.networkHandler.sendCommand(command);

@@ -1,53 +1,63 @@
+# Documentation Restructure & In-Game Reflection
 
-### Phase 1: GUI UX Improvements (Explicit Edit/Delete)
-#### [MODIFY] [TriggerDashboardScreen.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/TriggerDashboardScreen.java)
-- **Problem**: Right-click/Shift-Right-click is hidden/unknown to user.
-- **Solution**: Render small `[E]` (Edit) and `[X]` (Delete) buttons next to each saved event in the sidebar.
-- **Layout**: `[Icon] [Trigger Name]   [E] [X]`
-### Phase 1: GUI UX Improvements (Explicit Edit/Delete)
-#### [MODIFY] [TriggerDashboardScreen.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/gui/TriggerDashboardScreen.java)
-- **Problem**: Right-click/Shift-Right-click is hidden/unknown to user.
-- **Solution**: Render small `[E]` (Edit) and `[X]` (Delete) buttons next to each saved event in the sidebar.
-- **Layout**: `[Icon] [Trigger Name]   [E] [X]`
+## Goal
+1.  **Restructure `docs/`**: Separate stable/foundational documents from active/growth documents to protect the core while enabling "extravagant success".
+2.  **In-Game Learning**: Add a JSON file describing this structure and expose it within the mod's gameplay (e.g., via the Course interface) so developers/players can learn about the project structure while playing.
 
-### Phase 3: Context-Aware Quiz Delivery
-#### [MODIFY] [QuizManager.java](file:///c:/Users/minin/.gemini/antigravity/scratch/minecraft-mod/src/main/java/com/example/educationmod/QuizManager.java)
-- **Fix**: Ensure `startQuiz` checks if the quiz topic is relevant to the trigger.
-- **Logic**: Add tags to Quizzes (e.g., "mining", "combat"). Match with Trigger tags.
+## User Review Required
+> [!IMPORTANT]
+> **Folder Naming**: I am proposing `docs/foundation` for the "safe/don't edit" files and keeping active files in the root `docs/` or moving them to `docs/workspace`.
+> **Proposed Split**:
+> *   **Foundation (Safe)**: `project_evolution.md`, `design_evolution.md`, `DEVELOPER_ONBOARDING.md`, `handoff.md`
+> *   **Workspace (Growth)**: `task.md`, `implementation_plan.md`, `walkthrough.md`
 
-## Phase 7: Library Sync (Git Integration)
-- [x] **Structure**: Create `src/main/resources/library` folders.
-- [ ] **Backend**: Update `importLibrary()` to accept flags (events, topics, courses).
-- [ ] **UI**:
-    - [x] Create `SyncScreen` with checkboxes for each category.
-    - [x] Update "Sync" button on Dashboard to open `SyncScreen`.
+## Proposed Changes
 
-## Phase 8: Skyblock Content & UI Fixes
-- [x] **UI Fix**:
-    - [x] Update `TriggerDashboardScreen` to render the name of the selected Trigger/Condition/Action inside or below its slot.
-    - [x] Ensure the text updates immediately upon selection.
-- [x] **Content Expansion**:
-    - [x] **Triggers**: `SB_KILL_MOB` (Diamond Sword), `SB_GAIN_XP` (Exp Bottle), `SB_REGION_ENTER` (Compass).
-    - [x] **Conditions**: `SB_LEVEL_REQ` (Book), `SB_ITEM_REQ` (Chest), `SB_PET_REQ` (Bone).
-    - [x] **Actions**: `SB_GIVE_ITEM` (Emerald), `SB_PLAY_SOUND` (Note Block).
+### Documentation Workflow Rules
+#### [UPDATE] `docs/foundation/DEVELOPER_ONBOARDING.md` & `README.md`
+- **Safe Files Rule**: `project_evolution.md` and `design_evolution.md` are **APPEND-ONLY**. They record the history. Update them when major changes or design pivots occur.
+- **Pre-Push Rule**: Before `git push`, explicitly review and upgrade `DEVELOPER_ONBOARDING.md` and `handoff.md` to ensure they match the current state.
+- **README**: Update `README.md` to reflect the new `docs/foundation` vs `docs/workspace` structure and these workflow rules.
 
-## Phase 9: Chat Integration & Polish (Quick Win)
-- [x] **Chat Formatting**: Create `ChatUtils` for consistent, pretty mod messages.
-- [x] **Action Execution**: Ensure `SEND_MESSAGE` uses the new formatting.
-- [x] **Hypixel Prep**: Add a debug command to simulate server events.
+### Documentation Structure
+#### [MODIFY] `docs/`
+- Create `docs/foundation/`
+- Move `project_evolution.md`, `design_evolution.md`, `DEVELOPER_ONBOARDING.md`, `handoff.md` to `docs/foundation/`
+- Update `DEVELOPER_ONBOARDING.md` and `README.md` to reflect this new structure and the rules above.
 
-## Next Steps (Planned)
-- [ ] **Hypixel Integration Testing**
-- [ ] **Chat UI Improvements**
-- [ ] **Advanced Data Refinement UI**
+### Resources
+#### [NEW] `src/main/resources/assets/educationmod/courses/project_structure.json`
+- A JSON file describing the new `docs` structure.
+- Format compatible with the existing `BookScreen` or a new format if needed.
+- Content:
+  ```json
+  {
+    "title": "Project Architecture",
+    "description": "Learn about the conscious structure of this mod.",
+    "chapters": [
+      {
+        "title": "Foundation",
+        "content": "The 'Foundation' folder contains the immutable core principles..."
+      },
+      {
+        "title": "Growth",
+        "content": "The 'Workspace' is where active development happens..."
+      }
+    ]
+  }
+  ```
+
+### Java Code
+#### [MODIFY] `com.example.educationmod.gui.BookScreen`
+- Update logic to load `project_structure.json` as a special course or add it to the default course list.
+- Ensure it renders correctly.
 
 ## Verification Plan
-### Manual Testing
-1. **GUI**: Open Dashboard. Verify `[E]` and `[X]` buttons appear. Click them to confirm they work.
-2. **Immersive**:
-    - Enable Immersive Mode.
-    - Break a Diamond Block.
-    - Verify a proposal appears (Chat or Toast).
-    - Accept it.
-    - Verify it appears in the Dashboard.
-3. **HUD**: Verify HUD remains visible (or correctly toggled) during gameplay.
+### Automated Tests
+- None (Documentation and GUI visual check).
+
+### Manual Verification
+1.  **File System**: Verify `docs/foundation` exists and contains the correct files.
+2.  **In-Game**: Open the "Courses" menu (or specific trigger).
+3.  **Verify**: Check that "Project Architecture" (or similar) appears.
+4.  **Verify**: Read the content in-game and confirm it matches the JSON.

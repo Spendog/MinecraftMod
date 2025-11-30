@@ -142,7 +142,9 @@ public class ModConfigManager {
     public static class EventDefinition {
         public String name;
         public String trigger;
-        public String condition;
+        public String condition; // Maps to "Target" in GUI
+        public String requirement; // Maps to "Requirement" in GUI
+        public String requirementData; // NEW: Stores extra data (e.g. Item ID)
         public ActionDefinition action;
     }
 

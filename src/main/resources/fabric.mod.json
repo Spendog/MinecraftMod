@@ -14,25 +14,19 @@
     "license": "CC0-1.0",
     "icon": "assets/educationmod/icon.png",
     "environment": "*",
+    "depends": {
+        "fabricloader": ">=0.16.5",
+        "minecraft": "~1.21.1",
+        "java": ">=21",
+        "fabric-api": "*"
+    },
     "entrypoints": {
         "main": [
             "com.example.educationmod.EducationMod"
         ],
         "client": [
             "com.example.educationmod.EducationModClient"
-        ],
-        "modmenu": [
-            "com.example.educationmod.ModMenuIntegration"
         ]
-    },
-    "mixins": [
-        "educationmod.mixins.json"
-    ],
-    "depends": {
-        "fabricloader": ">=0.16.5",
-        "minecraft": "~1.21.1",
-        "java": ">=21",
-        "fabric-api": "*"
     },
     "suggests": {
         "another-mod": "*"

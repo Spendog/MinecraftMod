@@ -2,7 +2,7 @@ package com.example.educationmod.debug;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
+// import net.minecraft.text.Text; // Unused
 import org.lwjgl.glfw.GLFW;
 import com.example.educationmod.ModSettings;
 
@@ -145,9 +145,60 @@ public class DeveloperConsole {
             case "study":
                 handleStudyCommand(command);
                 break;
+            case "simulate":
+                handleSimulateCommand(command);
+                break;
             default:
                 logError("Unknown command: " + parts[0]);
                 break;
+        }
+    }
+
+    private void handleSimulateCommand(String command) {
+        // simulate <trigger_id> [target_id] [requirement_id]
+        String[] parts = command.split(" ");
+        if (parts.length < 2) {
+            logError("Usage: simulate <trigger_id> [target_id] [requirement_id]");
+            return;
+        }
+
+        String triggerId = parts[1].toUpperCase();
+        String targetId = parts.length > 2 ? parts[2] : "NONE";
+        String requirementId = parts.length > 3 ? parts[3] : "NONE";
+
+        log("Simulating Trigger: " + triggerId, 0x55FFFF);
+        log(" - Target: " + targetId, 0xAAAAAA);
+        log(" - Requirement: " + requirementId, 0xAAAAAA);
+
+        List<com.example.educationmod.ModConfigManager.EventDefinition> events = com.example.educationmod.ModConfigManager
+                .getEvents();
+        int count = 0;
+
+        for (com.example.educationmod.ModConfigManager.EventDefinition event : events) {
+            if (event.trigger.equals(triggerId)) {
+                // Check Target (Condition)
+                boolean targetMatch = event.condition.equals("NONE") || event.condition.equalsIgnoreCase(targetId);
+
+                // Check Requirement
+                boolean reqMatch = true;
+                if (event.requirement != null && !event.requirement.equals("NONE")) {
+                    reqMatch = event.requirement.equalsIgnoreCase(requirementId);
+                }
+
+                if (targetMatch && reqMatch) {
+                    log(" -> Executing Action: " + event.action.type, 0x55FF55);
+                    com.example.educationmod.ActionManager.execute(
+                            com.example.educationmod.registries.ActionRegistry.get(event.action.type),
+                            event.action.data);
+                    count++;
+                }
+            }
+        }
+
+        if (count == 0) {
+            logWarning("No matching events found.");
+        } else {
+            log("Executed " + count + " actions.", 0x55FF55);
         }
     }
 

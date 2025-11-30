@@ -79,9 +79,12 @@
 -   **ActionManager**: Implemented handlers for `SEND_MESSAGE`, `SEND_TITLE`, `DISPLAY_ACTION_BAR`, `SB_GIVE_ITEM`, and `SB_PLAY_SOUND`.
 -   **PassiveLearning**: Updated to use `ChatUtils` for fact broadcasting.
 
+### v028 Hotfix
+-   **Crash Fix**: Resolved `ParseMetadataException` by correcting the structure of `fabric.mod.json`. The `depends` block was incorrectly named `entrypoints`.
+
 ## Build Status
 - **Status**: Build SUCCESSFUL (exit code 0)
-- **Artifact**: `build/libs/MinecraftEDU_v1.21.4-v027.jar`
+- **Artifact**: `build/libs/MinecraftEDU_v1.21.4-v028.jar`
 - [ ] **Triggers**:
     - Open "Triggers" from Mod Menu.
     - Click "+ Add Trigger".

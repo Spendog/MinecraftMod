@@ -19,21 +19,32 @@ import java.util.stream.Collectors;
 public class TriggerDashboardScreen extends Screen {
     private final Screen parent;
     private TextFieldWidget searchField;
-    private TextFieldWidget nameField; // New Field
-    private TextFieldWidget skyblockIdField; // New Field
+    private TextFieldWidget nameField;
+    private TextFieldWidget skyblockIdField;
     private List<Object> filteredItems = new ArrayList<>();
-    private int scrollOffset = 0;
-    private int selectedSlot = 0; // 0=Trigger, 1=Condition, 2=Action
+    private int selectedSlot = 0; // 0=Trigger, 1=Target (Condition), 2=Requirement, 3=Action
     private TriggerRegistry.TriggerType selectedTrigger;
-    private ConditionRegistry.ConditionType selectedCondition;
+    private ConditionRegistry.ConditionType selectedTarget;
+    private com.example.educationmod.registries.RequirementRegistry.RequirementType selectedRequirement;
     private ActionRegistry.ActionType selectedAction;
-    private String conditionValue = "";
+    private String targetValue = "";
+    private String requirementData = "";
     private String actionData = "";
+    private ItemStack requirementIconOverride = ItemStack.EMPTY;
 
     public TriggerDashboardScreen(Screen parent) {
         super(Text.literal("EDU MC Dashboard"));
         this.parent = parent;
         refreshList("");
+    }
+
+    // Called by REI Plugin
+    public void handleRequirementDrop(String itemId, ItemStack stack) {
+        this.selectedRequirement = com.example.educationmod.registries.RequirementRegistry.get("HOLDING_ITEM");
+        this.requirementData = itemId;
+        this.requirementIconOverride = stack;
+        this.selectedSlot = 2; // Focus Requirement slot
+        com.example.educationmod.ActivityLogger.log("Requirement set to Holding: " + itemId);
     }
 
     @Override
@@ -75,7 +86,6 @@ public class TriggerDashboardScreen extends Screen {
         // Safe Mode Indicator (Read-Only)
         this.addDrawableChild(
                 ButtonWidget.builder(Text.literal(ModSettings.isSafeMode() ? "Safe: ON" : "Safe: OFF"), button -> {
-                    // Read-only, do nothing or show tooltip
                 }).dimensions(this.width - 100, navY, 60, 20).build()).active = false;
 
         // --- Dashboard Controls ---
@@ -92,12 +102,10 @@ public class TriggerDashboardScreen extends Screen {
         this.searchField.setChangedListener(this::refreshList);
         this.addDrawableChild(searchField);
 
-        // Skyblock ID Field (Restored Feature, positioned next to search)
+        // Skyblock ID Field
         this.skyblockIdField = new TextFieldWidget(this.textRenderer, center + 60, topBarHeight + 10, 80, 20,
                 Text.literal("SB ID"));
         this.skyblockIdField.setPlaceholder(Text.literal("Skyblock ID"));
-        // Fix: Set visibility based on currently selected trigger to persist state on
-        // resize
         this.skyblockIdField.setVisible(selectedTrigger != null && "SKYBLOCK_ITEM_USE".equals(selectedTrigger.id));
         this.addDrawableChild(skyblockIdField);
 
@@ -106,7 +114,7 @@ public class TriggerDashboardScreen extends Screen {
             saveEvent();
         }).dimensions(this.width - 120, this.height - 30, 100, 20).build());
 
-        // Close Button (Exit Mod Menu)
+        // Close Button
         this.addDrawableChild(ButtonWidget.builder(Text.literal("X"), button -> {
             this.close();
         }).dimensions(this.width - 30, 5, 20, 20).build());
@@ -116,7 +124,6 @@ public class TriggerDashboardScreen extends Screen {
         filteredItems.clear();
         String q = query.toLowerCase();
 
-        // Strict Filtering based on Selected Slot
         if (selectedSlot == 0) {
             filteredItems.addAll(TriggerRegistry.getAll().stream()
                     .filter(t -> t.displayName.toLowerCase().contains(q))
@@ -126,6 +133,10 @@ public class TriggerDashboardScreen extends Screen {
                     .filter(c -> c.displayName.toLowerCase().contains(q))
                     .collect(Collectors.toList()));
         } else if (selectedSlot == 2) {
+            filteredItems.addAll(com.example.educationmod.registries.RequirementRegistry.getAll().stream()
+                    .filter(r -> r.displayName.toLowerCase().contains(q))
+                    .collect(Collectors.toList()));
+        } else if (selectedSlot == 3) {
             filteredItems.addAll(ActionRegistry.getAll().stream()
                     .filter(a -> a.displayName.toLowerCase().contains(q))
                     .collect(Collectors.toList()));
@@ -136,20 +147,20 @@ public class TriggerDashboardScreen extends Screen {
         if (selectedTrigger != null && selectedAction != null) {
             ModConfigManager.EventDefinition event = new ModConfigManager.EventDefinition();
             event.trigger = selectedTrigger.id;
-            event.condition = (selectedCondition != null) ? selectedCondition.id : "NONE";
+            event.condition = (selectedTarget != null) ? selectedTarget.id : "NONE";
+            event.requirement = (selectedRequirement != null) ? selectedRequirement.id : "NONE";
+            event.requirementData = requirementData;
 
-            // Handle Skyblock ID
             if ("SKYBLOCK_ITEM_USE".equals(selectedTrigger.id) && !skyblockIdField.getText().isEmpty()) {
                 event.condition = skyblockIdField.getText();
-            } else if (!conditionValue.isEmpty() && !"NONE".equals(event.condition)) {
-                event.condition = conditionValue;
+            } else if (!targetValue.isEmpty() && !"NONE".equals(event.condition)) {
+                event.condition = targetValue;
             }
 
             event.action = new ModConfigManager.ActionDefinition();
             event.action.type = selectedAction.id;
             event.action.data = actionData.isEmpty() ? "example_quiz.json" : actionData;
 
-            // Save Name
             if (!nameField.getText().isEmpty()) {
                 event.name = nameField.getText();
             }
@@ -158,13 +169,15 @@ public class TriggerDashboardScreen extends Screen {
             com.example.educationmod.ActivityLogger.log("Created new event: " + event.trigger);
 
             selectedTrigger = null;
-            selectedCondition = null;
+            selectedTarget = null;
+            selectedRequirement = null;
             selectedAction = null;
+            requirementData = "";
+            requirementIconOverride = ItemStack.EMPTY;
             skyblockIdField.setText("");
             skyblockIdField.setVisible(false);
             nameField.setText("");
 
-            // Reset to Trigger slot
             selectedSlot = 0;
             refreshList(searchField.getText());
         }
@@ -172,7 +185,6 @@ public class TriggerDashboardScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        // Check Sidebar Clicks (Event Management)
         List<ModConfigManager.EventDefinition> events = ModConfigManager.getEvents();
         if (events != null && mouseX < 150 && mouseY > 30) {
             int eventY = 60;
@@ -180,13 +192,25 @@ public class TriggerDashboardScreen extends Screen {
                 ModConfigManager.EventDefinition ev = events.get(i);
 
                 if (mouseY >= eventY && mouseY <= eventY + 20) {
-                    // Edit Button: x ~ 110, width 12
                     if (mouseX >= 110 && mouseX <= 122) {
                         this.selectedTrigger = TriggerRegistry.get(ev.trigger);
-                        this.selectedCondition = ConditionRegistry.get(ev.condition);
+                        this.selectedTarget = ConditionRegistry.get(ev.condition);
+                        this.selectedRequirement = com.example.educationmod.registries.RequirementRegistry
+                                .get(ev.requirement);
                         this.selectedAction = ActionRegistry.get(ev.action.type);
                         this.actionData = ev.action.data != null ? ev.action.data : "";
+                        this.requirementData = ev.requirementData != null ? ev.requirementData : "";
                         this.nameField.setText(ev.name != null ? ev.name : "");
+
+                        if (this.requirementData != null && !this.requirementData.isEmpty()) {
+                            net.minecraft.registry.RegistryKey<net.minecraft.item.Item> key = net.minecraft.registry.RegistryKey
+                                    .of(net.minecraft.registry.RegistryKeys.ITEM,
+                                            net.minecraft.util.Identifier.of(this.requirementData));
+                            this.requirementIconOverride = new ItemStack(
+                                    net.minecraft.registry.Registries.ITEM.get(key));
+                        } else {
+                            this.requirementIconOverride = ItemStack.EMPTY;
+                        }
 
                         boolean isSkyblock = "SKYBLOCK_ITEM_USE".equals(ev.trigger);
                         this.skyblockIdField.setVisible(isSkyblock);
@@ -198,7 +222,6 @@ public class TriggerDashboardScreen extends Screen {
                         return true;
                     }
 
-                    // Delete Button: x ~ 130, width 12
                     if (mouseX >= 130 && mouseX <= 142) {
                         ModConfigManager.deleteEvent(i);
                         com.example.educationmod.ActivityLogger.log("Deleted event: " + ev.trigger);
@@ -209,26 +232,30 @@ public class TriggerDashboardScreen extends Screen {
             }
         }
 
-        // Check Slot Clicks
         int sidebarWidth = 100;
         int center = this.width / 2 + (sidebarWidth / 2);
         int slotY = 80;
-        int slotSize = 60;
+        int slotSize = 50;
+        int spacing = 10;
+        int startX = center - 130;
 
-        if (isHovering(center - 140, slotY, slotSize, slotSize, mouseX, mouseY)) {
+        if (isHovering(startX, slotY, slotSize, slotSize, mouseX, mouseY)) {
             selectedSlot = 0;
             refreshList(searchField.getText());
         }
-        if (isHovering(center - 30, slotY, slotSize, slotSize, mouseX, mouseY)) {
+        if (isHovering(startX + slotSize + spacing, slotY, slotSize, slotSize, mouseX, mouseY)) {
             selectedSlot = 1;
             refreshList(searchField.getText());
         }
-        if (isHovering(center + 80, slotY, slotSize, slotSize, mouseX, mouseY)) {
+        if (isHovering(startX + (slotSize + spacing) * 2, slotY, slotSize, slotSize, mouseX, mouseY)) {
             selectedSlot = 2;
             refreshList(searchField.getText());
         }
+        if (isHovering(startX + (slotSize + spacing) * 3, slotY, slotSize, slotSize, mouseX, mouseY)) {
+            selectedSlot = 3;
+            refreshList(searchField.getText());
+        }
 
-        // Check Grid Clicks
         int x = center - 150;
         int y = 160;
         int itemSize = 40;
@@ -245,17 +272,21 @@ public class TriggerDashboardScreen extends Screen {
                 if (selectedSlot == 0 && item instanceof TriggerRegistry.TriggerType) {
                     selectedTrigger = (TriggerRegistry.TriggerType) item;
                     skyblockIdField.setVisible("SKYBLOCK_ITEM_USE".equals(selectedTrigger.id));
-                    // Auto-advance
                     selectedSlot = 1;
                     refreshList(searchField.getText());
                 } else if (selectedSlot == 1 && item instanceof ConditionRegistry.ConditionType) {
-                    selectedCondition = (ConditionRegistry.ConditionType) item;
-                    // Auto-advance
+                    selectedTarget = (ConditionRegistry.ConditionType) item;
                     selectedSlot = 2;
                     refreshList(searchField.getText());
-                } else if (selectedSlot == 2 && item instanceof ActionRegistry.ActionType) {
+                } else if (selectedSlot == 2
+                        && item instanceof com.example.educationmod.registries.RequirementRegistry.RequirementType) {
+                    selectedRequirement = (com.example.educationmod.registries.RequirementRegistry.RequirementType) item;
+                    requirementData = "";
+                    requirementIconOverride = ItemStack.EMPTY;
+                    selectedSlot = 3;
+                    refreshList(searchField.getText());
+                } else if (selectedSlot == 3 && item instanceof ActionRegistry.ActionType) {
                     selectedAction = (ActionRegistry.ActionType) item;
-                    // Stay on Action or maybe highlight Save?
                 }
                 return true;
             }
@@ -270,15 +301,12 @@ public class TriggerDashboardScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Solid Background
         context.fill(0, 0, this.width, this.height, 0xFF050505);
 
-        // Top Bar
         context.fill(0, 0, this.width, 30, 0xFF202020);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
 
-        // Sidebar
-        int sidebarWidth = 150; // Increased for buttons
+        int sidebarWidth = 150;
         context.fill(0, 30, sidebarWidth, this.height, 0xFF151515);
         context.drawText(this.textRenderer, "My Events", 10, 40, 0xFFFFFF, false);
 
@@ -290,10 +318,8 @@ public class TriggerDashboardScreen extends Screen {
                 if (label.length() > 12)
                     label = label.substring(0, 10) + "..";
 
-                // Draw Name
                 context.drawText(this.textRenderer, label, 10, eventY, 0xFFFFFF, false);
 
-                // Draw [E] Edit
                 int editBtnX = 110;
                 int btnSize = 12;
                 boolean hoverEdit = mouseX >= editBtnX && mouseX <= editBtnX + btnSize && mouseY >= eventY
@@ -302,35 +328,45 @@ public class TriggerDashboardScreen extends Screen {
                         hoverEdit ? 0xFF55FF55 : 0xFF333333);
                 context.drawText(this.textRenderer, "E", editBtnX + 3, eventY + 2, 0xFFFFFF, false);
 
-                // Draw [X] Delete
                 int delBtnX = 130;
                 boolean hoverDel = mouseX >= delBtnX && mouseX <= delBtnX + btnSize && mouseY >= eventY
                         && mouseY <= eventY + btnSize;
-                context.fill(delBtnX, eventY, delBtnX + btnSize, eventY + btnSize, hoverDel ? 0xFFFF5555 : 0xFF333333);
+                context.fill(delBtnX, eventY, delBtnX + btnSize, eventY + btnSize,
+                        hoverDel ? 0xFFFF5555 : 0xFF333333);
                 context.drawText(this.textRenderer, "X", delBtnX + 3, eventY + 2, 0xFFFFFF, false);
 
                 eventY += 20;
             }
         }
 
-        // Workbench Slots
         int center = this.width / 2 + (sidebarWidth / 2);
         int slotY = 80;
-        int slotSize = 60;
+        int slotSize = 50;
+        int spacing = 10;
+        int startX = center - 130;
 
-        drawSlot(context, center - 140, slotY, slotSize,
-                selectedTrigger != null ? selectedTrigger.displayName : "Trigger",
+        drawSlot(context, startX, slotY, slotSize, selectedTrigger != null ? selectedTrigger.displayName : "Trigger",
                 selectedTrigger != null ? selectedTrigger.icon : ItemStack.EMPTY, selectedSlot == 0);
-        context.drawText(this.textRenderer, "+", center - 60, slotY + 25, 0xFFFFFF, false);
-        drawSlot(context, center - 30, slotY, slotSize,
-                selectedCondition != null ? selectedCondition.displayName : "Condition",
-                selectedCondition != null ? selectedCondition.icon : ItemStack.EMPTY, selectedSlot == 1);
-        context.drawText(this.textRenderer, "->", center + 50, slotY + 25, 0xFFFFFF, false);
-        drawSlot(context, center + 80, slotY, slotSize,
-                selectedAction != null ? selectedAction.displayName : "Action",
-                selectedAction != null ? selectedAction.icon : ItemStack.EMPTY, selectedSlot == 2);
+        context.drawText(this.textRenderer, "+", startX + slotSize + 2, slotY + 20, 0xFFFFFF, false);
 
-        // Grid
+        drawSlot(context, startX + slotSize + spacing, slotY, slotSize,
+                selectedTarget != null ? selectedTarget.displayName : "Target",
+                selectedTarget != null ? selectedTarget.icon : ItemStack.EMPTY, selectedSlot == 1);
+        context.drawText(this.textRenderer, "+", startX + (slotSize + spacing) * 2 - 8, slotY + 20, 0xFFFFFF, false);
+
+        ItemStack reqIcon = !requirementIconOverride.isEmpty() ? requirementIconOverride
+                : (selectedRequirement != null ? selectedRequirement.icon : ItemStack.EMPTY);
+        String reqLabel = selectedRequirement != null ? selectedRequirement.displayName : "Req";
+        if (!requirementData.isEmpty())
+            reqLabel = "Hold: " + requirementData.replace("minecraft:", "");
+
+        drawSlot(context, startX + (slotSize + spacing) * 2, slotY, slotSize, reqLabel, reqIcon, selectedSlot == 2);
+        context.drawText(this.textRenderer, "->", startX + (slotSize + spacing) * 3 - 8, slotY + 20, 0xFFFFFF, false);
+
+        drawSlot(context, startX + (slotSize + spacing) * 3, slotY, slotSize,
+                selectedAction != null ? selectedAction.displayName : "Action",
+                selectedAction != null ? selectedAction.icon : ItemStack.EMPTY, selectedSlot == 3);
+
         int x = center - 150;
         int y = 160;
         int itemSize = 40;
@@ -364,12 +400,16 @@ public class TriggerDashboardScreen extends Screen {
                 icon = c.icon;
                 name = c.displayName;
                 color = 0xFF5555FF;
+            } else if (item instanceof com.example.educationmod.registries.RequirementRegistry.RequirementType) {
+                com.example.educationmod.registries.RequirementRegistry.RequirementType r = (com.example.educationmod.registries.RequirementRegistry.RequirementType) item;
+                icon = r.icon;
+                name = r.displayName;
+                color = 0xFFFFFF55;
             }
 
             context.fill(itemX, itemY, itemX + itemSize, itemY + 2, color);
             context.drawItem(icon, itemX + 12, itemY + 5);
 
-            // Scaled Text for better visibility
             float scale = 0.6f;
             context.getMatrices().push();
             context.getMatrices().translate(itemX + 2, itemY + 28, 0);

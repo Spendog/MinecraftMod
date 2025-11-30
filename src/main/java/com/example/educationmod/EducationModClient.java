@@ -72,6 +72,15 @@ public class EducationModClient implements ClientModInitializer {
         ChatQuizHandler.init();
         LearningHUD.init();
 
+        // Initialize Context Framework (v028)
+        com.example.educationmod.core.ContextManager.getInstance();
+        com.example.educationmod.registries.RequirementRegistry.init();
+
+        // Register Tick Event for Context Manager
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            com.example.educationmod.core.ContextManager.getInstance().tick(client);
+        });
+
         EducationMod.LOGGER.info("EducationModClient Initialized with v012 Immersive Learning.");
     }
 }

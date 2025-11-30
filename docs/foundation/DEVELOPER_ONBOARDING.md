@@ -145,23 +145,6 @@ minecraft-mod/
 │       ├── fabric.mod.json         # Mod metadata + entrypoints
 │       └── assets/educationmod/
 │           └── default_content/    # Bundled sample content
-│               ├── topics/         # Sample quiz topics
-│               ├── events/         # Sample triggers
-│               └── courses/        # Sample curriculum
-├── build/libs/                     # Build output (ONLY latest JAR)
-├── scripts/                        # Deployment automation
-│   ├── pre-push-check.bat         # Consistency validation
-│   └── upgrade-mod.bat            # User upgrade script
-├── .gemini/antigravity/brain/.../  # Development artifacts
-│   ├── task.md                    # Task tracking
-│   ├── implementation_plan.md     # Current plan
-│   ├── walkthrough.md             # What was built
-│   ├── handoff.md                 # Architecture reference
-│   ├── strategic_options.md       # Long-term roadmap
-│   └── DEVELOPER_ONBOARDING.md    # This file
-├── README.md                      # User guide
-├── gradle.properties              # Version source of truth
-└── .gitignore                     # Keeps GitHub clean
 ```
 
 ---

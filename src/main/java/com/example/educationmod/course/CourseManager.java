@@ -29,18 +29,36 @@ public class CourseManager {
 
     private static void loadCourses() {
         COURSES.clear();
-        File[] files = COURSES_DIR.listFiles((dir, name) -> name.endsWith(".json"));
-        if (files == null)
-            return;
 
-        for (File file : files) {
-            try (FileReader reader = new FileReader(file)) {
-                Course course = GSON.fromJson(reader, Course.class);
-                course.id = file.getName().replace(".json", "");
-                COURSES.put(course.id, course);
-            } catch (Exception e) {
-                e.printStackTrace();
+        // Load bundled courses (like Project Architecture)
+        loadBundledCourse("project_structure");
+
+        // Load user courses
+        File[] files = COURSES_DIR.listFiles((dir, name) -> name.endsWith(".json"));
+        if (files != null) {
+            for (File file : files) {
+                try (FileReader reader = new FileReader(file)) {
+                    Course course = GSON.fromJson(reader, Course.class);
+                    course.id = file.getName().replace(".json", "");
+                    COURSES.put(course.id, course);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        }
+    }
+
+    private static void loadBundledCourse(String name) {
+        try (java.io.InputStream stream = CourseManager.class
+                .getResourceAsStream("/assets/educationmod/courses/" + name + ".json")) {
+            if (stream != null) {
+                java.io.InputStreamReader reader = new java.io.InputStreamReader(stream);
+                Course course = GSON.fromJson(reader, Course.class);
+                course.id = name;
+                COURSES.put(course.id, course);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

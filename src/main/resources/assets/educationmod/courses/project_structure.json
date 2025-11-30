@@ -1,0 +1,18 @@
+{
+    "title": "Project Architecture",
+    "description": "Learn about the conscious structure of this mod.",
+    "chapters": [
+        {
+            "title": "Foundation",
+            "content": "The 'Foundation' folder (docs/foundation/) contains the immutable core principles and history. These files are APPEND-ONLY. They include: project_evolution.md (History), design_evolution.md (Decisions), and DEVELOPER_ONBOARDING.md (Workflow)."
+        },
+        {
+            "title": "Workspace",
+            "content": "The 'Workspace' (docs/) is where active development happens. It contains: task.md (Checklist), implementation_plan.md (Blueprint), and walkthrough.md (Proof)."
+        },
+        {
+            "title": "Workflow Rules",
+            "content": "1. Safe Files: Never rewrite history. 2. Pre-Push: Always upgrade onboarding docs. 3. Conscious Coding: Plan before you code."
+        }
+    ]
+}

@@ -1,20 +1,3 @@
-# Education Mod (v027)
-
-> **Philosophy**: Code is ephemeral; Ideas are persistent. We value **growth over stability**. We are willing to break a feature to reintroduce it in a more perfect form.
-
-A Minecraft mod that turns gameplay into an immersive learning experience. The core is a data-driven engine where all content (quizzes, triggers, courses) lives in JSON files, safe from code refactors.
-
-## 🚀 Quick Start (For Developers)
-**Start Here**: [docs/project_evolution.md](docs/project_evolution.md) - Captures our "conscious" workflow and design philosophy.
-
-### 🛡️ The "Growth Cycle" & Checks and Balances
-To ensure safe growth, we use a strict documentation protocol. **Do not modify code without updating the corresponding document first.**
-
-1.  **Phase 1: Alignment** -> [docs/project_evolution.md](docs/project_evolution.md)
-    *   *Purpose*: The "Spirit" of the project. Read this to understand the *why* and the *workflow*.
-    *   *Check*: Does your idea align with the "Conscious Workflow"?
-
-2.  **Phase 2: Design** -> [docs/implementation_plan.md](docs/implementation_plan.md)
     *   *Purpose*: The "Blueprint". Propose your technical changes here.
     *   *Check*: Have you identified breaking changes?
 

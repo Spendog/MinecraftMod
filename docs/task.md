@@ -41,7 +41,10 @@
 - [x] **Action Execution**: Ensure `SEND_MESSAGE` uses the new formatting.
 - [x] **Hypixel Prep**: Add a debug command to simulate server events.
 
-## Future Goals (Post-v027)
+## Phase 10: v028 Hotfix
+- [x] **Crash Fix**: Correct `fabric.mod.json` structure (renamed `depends` to `entrypoints` by mistake).
+
+## Future Goals (Post-v028)
 - [ ] **Testing**: Begin testing on Hypixel server.
 - [ ] **Data Refinement**: Make in-mod data editing more intuitive.
 - [ ] **Content Area**: Refine the dashboard content area to show more relevant info.
